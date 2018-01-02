@@ -1,7 +1,10 @@
 package core;
 
+import config.AppConfiguration;
+
 public class StartSimulation {
     public static void main(String[] args) {
-        System.out.printf("Hello World!");
+        AppConfiguration.readConfiguration();
+        System.exit(0);
     }
 }
