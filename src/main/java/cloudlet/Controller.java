@@ -8,7 +8,7 @@ public class Controller {
     /* Reference to cloud system*/
     private Cloud cloudService;
 
-    /* Reference to cloudletsystem*/
+    /* Reference to cloudlet system*/
     private Cloudlet cloudletService;
 
     public Controller() {

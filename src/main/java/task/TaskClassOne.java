@@ -5,7 +5,7 @@ public class TaskClassOne extends AbstractTask {
     /**
      * Compute Completion Time
      */
-    public Double getCompletionTime() {
+    public double getCompletionTime() {
         return this.getArrivalTime() + this.getServiceTime();
     }
 }

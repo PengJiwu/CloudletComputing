@@ -1,4 +1,4 @@
-/* ------------------------------------------------------------------------
+package library;/* ------------------------------------------------------------------------
  * This program illustrates an array-based algorithm for tallying a 
  * continuous-data histogram for data read from standard input (stdin).
  * Like program uvs, a compiled version of this program supports file
@@ -17,9 +17,11 @@
  * ------------------------------------------------------------------------ 
  */
 
-import java.io.*;
-import java.util.*;
-import java.text.*;
+import java.io.BufferedReader;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.DecimalFormat;
 
 
 class Outliers {

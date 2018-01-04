@@ -3,17 +3,17 @@ package task;
 public abstract class AbstractTask {
 
     /*Task arrival time*/
-    private Double arrivalTime;
+    private double arrivalTime;
 
     /*Task service time*/
-    private Double serviceTime;
+    private double serviceTime;
 
     public AbstractTask(){
         this.arrivalTime = 0.0;
         this.serviceTime = 0.0;
     }
 
-    public AbstractTask(Double arrivalTime, Double serviceTime) {
+    public AbstractTask(double arrivalTime, double serviceTime) {
         this.arrivalTime = arrivalTime;
         this.serviceTime = serviceTime;
     }
@@ -21,25 +21,25 @@ public abstract class AbstractTask {
     /**
      * Abstract method to compute CompletionTime
      */
-    public abstract Double getCompletionTime();
+    public abstract double getCompletionTime();
 
     /**
      *  Getter and Setter
      */
-    public Double getServiceTime() {
+    public double getServiceTime() {
         return serviceTime;
     }
 
-    public void setServiceTime(Double serviceTime) {
+    public void setServiceTime(double serviceTime) {
         this.serviceTime = serviceTime;
     }
 
 
-    public Double getArrivalTime() {
+    public double getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Double arrivalTime) {
+    public void setArrivalTime(double arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 }

@@ -3,16 +3,16 @@ package utils;
 public class Clock {
 
     /* Last arrival time */
-    private Double arrival;
+    private double arrival;
 
     /* Next Completion */
-    private Double completion;
+    private double completion;
 
     /* Current time */
-    private Double current;
+    private double current;
 
     /* Next-Event time*/
-    private Double next;
+    private double next;
 
     public Clock() {
         this.arrival = 0.0;
@@ -32,35 +32,35 @@ public class Clock {
     /**
      * Getter and Setter
      */
-    public Double getArrival() {
+    public double getArrival() {
         return arrival;
     }
 
-    public void setArrival(Double arrival) {
+    public void setArrival(double arrival) {
         this.arrival = arrival;
     }
 
-    public Double getCompletion() {
+    public double getCompletion() {
         return completion;
     }
 
-    public void setCompletion(Double completion) {
+    public void setCompletion(double completion) {
         this.completion = completion;
     }
 
-    public Double getCurrent() {
+    public double getCurrent() {
         return current;
     }
 
-    public void setCurrent(Double current) {
+    public void setCurrent(double current) {
         this.current = current;
     }
 
-    public Double getNext() {
+    public double getNext() {
         return next;
     }
 
-    public void setNext(Double next) {
+    public void setNext(double next) {
         this.next = next;
     }
 }

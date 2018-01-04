@@ -10,7 +10,6 @@ public class Cloudlet {
     /* Number of Class 2 Tasks*/
     private Integer n2;
 
-    //TODO completion as integer or Task?
     /* Number of Class 1 Tasks completed*/
     private Integer classOneCompletion;
 

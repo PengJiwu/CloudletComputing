@@ -4,8 +4,6 @@ import task.AbstractTask;
 
 public class Cloud {
 
-
-    //TODO completion as integer or Task?
     /* Number of Class 1 Tasks completed*/
     private Integer classOneCompletion;
 
