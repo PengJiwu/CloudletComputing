@@ -1,7 +1,9 @@
 package cloudlet;
 
 import cloud.Cloud;
+import config.AppConfiguration;
 import task.AbstractTask;
+import task.TaskClassOne;
 
 public class Controller {
 
@@ -16,14 +18,35 @@ public class Controller {
         this.cloudService = new Cloud();
     }
 
-    //TODO implement
-    public void sendToCloud(AbstractTask task){}
+    public void sendToCloud(AbstractTask task){
+        cloudService.assignServer(task);
+    }
 
-    //TODO implement
-    public void handleTask(AbstractTask task){}
-
-    //TODO implement
-    public void handleEventQueue(){}
+    public void handleArrival(AbstractTask task){
+        //class 1 arrival
+        if (task instanceof TaskClassOne){
+            if (cloudletService.getN1() == AppConfiguration.N)
+                sendToCloud(task);
+            else if (cloudletService.getN1()+cloudletService.getN2() < AppConfiguration.S){
+                cloudletService.assignServer(task);
+                //TODO assign task to server
+            }
+            else if (cloudletService.getN2() > 0){
+                //TODO preemption
+                AbstractTask toStop = cloudletService.getStoppableTask();
+                sendToCloud(toStop);
+            }
+            else
+                cloudletService.assignServer(task);
+        }
+        //class 2 arrival
+        else{
+            if (cloudletService.getN1()+cloudletService.getN2() >= AppConfiguration.S)
+                sendToCloud(task);
+            else
+                cloudletService.assignServer(task);
+        }
+    }
 
 
     /**

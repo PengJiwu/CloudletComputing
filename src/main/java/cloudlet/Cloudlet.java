@@ -1,6 +1,7 @@
 package cloudlet;
 
 import task.AbstractTask;
+import task.TaskClassOne;
 
 public class Cloudlet {
 
@@ -26,8 +27,9 @@ public class Cloudlet {
         this.classTwoCompletion = 0;
     }
 
-    //TODO implement
+    //TODO server assignment
     public void assignServer(AbstractTask task){
+        this.incrementPopulation(task);
     }
 
     //TODO implement and change return type if server list implemented as list of Server type
@@ -42,6 +44,13 @@ public class Cloudlet {
 
     //TODO implement
     public void removeTask (AbstractTask task){
+    }
+
+    private void incrementPopulation(AbstractTask task){
+        if (task instanceof TaskClassOne)
+            this.n1++;
+        else
+            this.n2++;
     }
 
 

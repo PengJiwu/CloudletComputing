@@ -2,6 +2,8 @@ package utils;
 
 public class Clock {
 
+    private static Clock instance = null;
+
     /* Last arrival time */
     private double arrival;
 
@@ -14,11 +16,20 @@ public class Clock {
     /* Next-Event time*/
     private double next;
 
-    public Clock() {
+    private Clock() {
         this.arrival = 0.0;
         this.completion = 0.0;
         this.current = 0.0;
         this.next = 0.0;
+    }
+
+    /**
+     * Return singleton instance
+     */
+    public static Clock getInstance(){
+        if (instance == null)
+            instance = new Clock();
+        return instance;
     }
 
     /**

@@ -3,10 +3,10 @@ package task;
 public abstract class AbstractTask {
 
     /*Task arrival time*/
-    private double arrivalTime;
+    protected double arrivalTime;
 
     /*Task service time*/
-    private double serviceTime;
+    protected double serviceTime;
 
     public AbstractTask(){
         this.arrivalTime = 0.0;
@@ -41,5 +41,13 @@ public abstract class AbstractTask {
 
     public void setArrivalTime(double arrivalTime) {
         this.arrivalTime = arrivalTime;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractTask{" +
+                "arrivalTime=" + arrivalTime +
+                ", serviceTime=" + serviceTime +
+                '}';
     }
 }
