@@ -1,7 +1,5 @@
 package task;
 
-import config.AppConfiguration;
-
 public class TaskClassTwo extends AbstractTask {
 
     /* Time in which task is swapped to Cloud*/
@@ -10,27 +8,30 @@ public class TaskClassTwo extends AbstractTask {
     /* Task swapped*/
     private Boolean swapped;
 
+
+    private double setupTime;
+
     public TaskClassTwo() {
         this.swapTime = 0.0;
         this.swapped = false;
     }
 
-    public TaskClassTwo(double arrivalTime, double serviceTime, double swapTime, Boolean swapped) {
+    public TaskClassTwo(double arrivalTime, double serviceTime, double swapTime, double setupTime, Boolean swapped) {
         super(arrivalTime, serviceTime);
         this.swapTime = swapTime;
         this.swapped = swapped;
+        this.setupTime = setupTime;
     }
 
     public TaskClassTwo(double arrivalTime){
-        this(arrivalTime,0.0,0.0,false);
+        this(arrivalTime,0.0,0.0,0.0,false);
     }
 
     /**
      * Compute Completion Time
      */
-    //TODO use random exponential setup time insted fixed SETUP_TIME
     public double getCompletionTime() {
-        return this.isSwapped()? this.getSwapTime() + this.getServiceTime() + AppConfiguration.SETUP_TIME : this.getArrivalTime() + this.getServiceTime();
+        return this.isSwapped()? this.getSwapTime() + this.getServiceTime() + this.getSetupTime() : this.getArrivalTime() + this.getServiceTime();
     }
 
     /**
@@ -50,6 +51,14 @@ public class TaskClassTwo extends AbstractTask {
 
     public void setSwapped(Boolean swapped) {
         this.swapped = swapped;
+    }
+
+    public double getSetupTime() {
+        return setupTime;
+    }
+
+    public void setSetupTime(double setupTime) {
+        this.setupTime = setupTime;
     }
 
     @Override

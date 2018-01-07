@@ -1,43 +1,41 @@
 package event;
 
 import config.AppConfiguration;
-import library.Rvgs;
-import library.Rngs;
 import task.AbstractTask;
 import task.TaskClassOne;
 import task.TaskClassTwo;
 import utils.Clock;
+import utils.Distributions;
 
 public class EventGenerator {
 
-    private Rvgs rvgs;
-    private Rngs rngs;
+    private Distributions distributions;
 
     public EventGenerator(){
-        this.rngs = new Rngs();
-        this.rngs.plantSeeds(123456789);
-        this.rvgs = new Rvgs(this.rngs);
+        distributions = Distributions.getInstance();
     }
 
     //TODO missing queue push
     public ArrivalEvent generateArrival(){
-        rvgs.rngs.selectStream(1);
-        double type = rvgs.uniform(1.0, 2.0);
+
+        distributions.selectStream(1);
+        double type = distributions.uniform(1.0,2.0);
         double arrival = Clock.getInstance().getArrival();
         AbstractTask task;
         if(type <= 1.5){
-            rvgs.rngs.selectStream(2);
-            arrival += rvgs.exponential(1/ AppConfiguration.ARRIVAL_RATE_1);
+            distributions.selectStream(2);
+            arrival += distributions.exponential(AppConfiguration.ARRIVAL_RATE_1);
             task = new TaskClassOne(arrival);
         }
         else{
-            rvgs.rngs.selectStream(3);
-            arrival += rvgs.exponential(1/AppConfiguration.ARRIVAL_RATE_2);
+            distributions.selectStream(3);
+            arrival += distributions.exponential(AppConfiguration.ARRIVAL_RATE_2);
             task = new TaskClassTwo(arrival);
         }
         Clock.getInstance().setArrival(arrival);
         return new ArrivalEvent(task);
     }
+
 
 /*    public static void main(String[] args) {
         AppConfiguration.readConfiguration();
