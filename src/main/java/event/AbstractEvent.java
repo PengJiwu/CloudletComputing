@@ -2,6 +2,8 @@ package event;
 
 import task.AbstractTask;
 
+import java.util.Objects;
+
 public abstract class AbstractEvent implements Comparable<AbstractEvent>{
 
     private double eventTime;
@@ -48,5 +50,19 @@ public abstract class AbstractEvent implements Comparable<AbstractEvent>{
                 "eventTime=" + eventTime +
                 ", task=" + task.toString() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractEvent that = (AbstractEvent) o;
+        return Double.compare(that.eventTime, eventTime) == 0 ;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(eventTime, task);
     }
 }

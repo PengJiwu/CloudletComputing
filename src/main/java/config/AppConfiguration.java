@@ -22,7 +22,6 @@ public class AppConfiguration {
 
     public static void readConfiguration() {
         try {
-            System.out.println(System.getProperty("user.dir"));
             Properties prop = new Properties();
             FileInputStream inputStream = new FileInputStream(FILENAME);
             prop.load(inputStream);
@@ -33,8 +32,8 @@ public class AppConfiguration {
             CLOUDLET_M2 = Double.parseDouble(prop.getProperty("CLOUDLET_M2"));
             CLOUD_M1 = Double.parseDouble(prop.getProperty("CLOUD_M1"));
             CLOUD_M2 = Double.parseDouble(prop.getProperty("CLOUD_M2"));
-            CLOUD_M2 = Double.parseDouble(prop.getProperty("START"));
-            CLOUD_M2 = Double.parseDouble(prop.getProperty("STOP"));
+            START = Double.parseDouble(prop.getProperty("START"));
+            STOP = Double.parseDouble(prop.getProperty("STOP"));
             S = Integer.parseInt(prop.getProperty("S"));
             N = Integer.parseInt(prop.getProperty("N"));
 /*            System.out.println( "SETUP_TIME: " + SETUP_TIME + "\n" +

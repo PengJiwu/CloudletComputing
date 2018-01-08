@@ -19,6 +19,7 @@ public class Simulation {
         AppConfiguration.readConfiguration();
         setupEnvironment();
         run();
+        //printSystemValues();
         System.exit(0);
     }
 
@@ -26,20 +27,25 @@ public class Simulation {
         controller = new Controller();
         clock = Clock.getInstance();
         eventGenerator = new EventGenerator();
-        eventQueue = new EventQueue();
+        eventQueue = EventQueue.getInstance();
     }
 
     private static void run(){
-        while (clock.getArrival() < AppConfiguration.STOP){
-            AbstractEvent event = eventGenerator.generateArrival();
-            eventQueue.addEvent(event);
+        while (clock.getArrival() == AppConfiguration.START || eventQueue.getQueueSize() > 0){
+            if (clock.getArrival() < AppConfiguration.STOP){
+                AbstractEvent event = eventGenerator.generateArrival();
+                eventQueue.addEvent(event);
+            }
             AbstractEvent toHandle = eventQueue.getFirstAvailableEvent();
             clock.setCurrent(toHandle.getEventTime());
             if (toHandle instanceof ArrivalEvent){
                 controller.handleArrival(toHandle.getTask());
             }
             else{
-                //someone.handleCompletion(toHandle.getTask());
+                if (toHandle.getTask().isCloudlet())
+                    controller.getCloudletService().handleCompletion(toHandle.getTask());
+                else
+                    controller.getCloudService().handleCompletion(toHandle.getTask());
             }
         }
     }

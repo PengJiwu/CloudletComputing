@@ -15,7 +15,6 @@ public class EventGenerator {
         distributions = Distributions.getInstance();
     }
 
-    //TODO missing queue push
     public ArrivalEvent generateArrival(){
 
         distributions.selectStream(1);

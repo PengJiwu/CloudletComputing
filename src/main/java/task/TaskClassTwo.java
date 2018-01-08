@@ -8,7 +8,7 @@ public class TaskClassTwo extends AbstractTask {
     /* Task swapped*/
     private Boolean swapped;
 
-
+    /* Task swapped*/
     private double setupTime;
 
     public TaskClassTwo() {
