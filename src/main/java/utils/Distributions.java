@@ -36,4 +36,15 @@ public class Distributions {
     public double uniform(double a, double b){
         return rvgs.uniform(a, b);
     }
+
+    /*
+    public static void main(String[] args) {
+        Distributions d = Distributions.getInstance();
+        double arrival = 0;
+        for(int i = 0; i<20; i++) {
+            arrival = d.exponential((double) 1/0.45);
+            System.out.println(arrival);
+        }
+    }*/
 }
+

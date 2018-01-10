@@ -24,6 +24,13 @@ public class EventQueue {
         return queue.poll();
     }
 
+    @Override
+    public String toString() {
+        return "EventQueue{" +
+                "queue=" + queue.toString() +
+                '}';
+    }
+
     public void addEvent(AbstractEvent event){
         this.queue.add(event);
     }

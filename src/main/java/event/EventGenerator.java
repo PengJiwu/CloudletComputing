@@ -15,6 +15,8 @@ public class EventGenerator {
         distributions = Distributions.getInstance();
     }
 
+
+    //todo
     public ArrivalEvent generateArrival(){
 
         distributions.selectStream(1);
@@ -32,6 +34,7 @@ public class EventGenerator {
             task = new TaskClassTwo(arrival);
         }
         Clock.getInstance().setArrival(arrival);
+        //System.out.println("Task arrival: " + task.toString());
         return new ArrivalEvent(task);
     }
 

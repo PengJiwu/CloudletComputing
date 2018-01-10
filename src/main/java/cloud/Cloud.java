@@ -63,6 +63,8 @@ public class Cloud {
         task.setCloudlet(false);
         AbstractEvent toPush = new CompletionEvent(task);
         eventQueue.addEvent(toPush);
+
+        //System.out.println("TaskListCloud size = " + taskList.size());
     }
 
     private void incrementPopulation(AbstractTask task){
@@ -73,6 +75,9 @@ public class Cloud {
     }
 
     public void handleCompletion(AbstractTask task) {
+
+        //System.out.println("C CloudVariables: N1 = " + this.getN1() + " N2 = " + this.getN2());
+
         taskList.remove(task);
         if (task instanceof TaskClassOne){
             this.n1--;
@@ -82,6 +87,11 @@ public class Cloud {
             this.n2--;
             this.classTwoCompletion++;
         }
+
+       //System.out.println("C CloudletVariables post completion: N1 = " + this.getN1() + " N2 = " + this.getN2());
+       //System.out.println("Task removed: " + task.toString());
+       //System.out.println("TaskListCloud size = " + taskList.size());
+       //System.out.println("");
     }
 
 

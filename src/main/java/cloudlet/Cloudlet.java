@@ -60,6 +60,8 @@ public class Cloudlet {
         AbstractEvent toPush = new CompletionEvent(task);
         eventQueue.addEvent(toPush);
 
+        //System.out.println("TaskListCloudlet size = " + taskList.size());
+
     }
 
     public AbstractTask stopTask(double swappedTime) {
@@ -95,6 +97,9 @@ public class Cloudlet {
     }
 
     public void handleCompletion(AbstractTask task) {
+
+        //System.out.println("C CloudletVariables: N1 = " + this.getN1() + " N2 = " + this.getN2());
+
         taskList.remove(task);
         if (task instanceof TaskClassOne){
             this.n1--;
@@ -104,6 +109,13 @@ public class Cloudlet {
             this.n2--;
             this.classTwoCompletion++;
         }
+
+        //System.out.println("C CloudletVariables post completion: N1 = " + this.getN1() + " N2 = " + this.getN2());
+        //System.out.println("Task removed: " + task.toString());
+
+        //System.out.println("TaskListCloud size = " + taskList.size());
+        //System.out.println("TaskList: " + taskList.toString());
+        //System.out.println("");
     }
 
 

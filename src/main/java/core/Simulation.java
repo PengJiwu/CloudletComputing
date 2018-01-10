@@ -31,12 +31,18 @@ public class Simulation {
     }
 
     private static void run(){
+        //int i = 0;
         while (clock.getArrival() == AppConfiguration.START || eventQueue.getQueueSize() > 0){
-            if (clock.getArrival() < AppConfiguration.STOP){
+            if (clock.getArrival() < AppConfiguration.STOP /*&& i<10*/){
                 AbstractEvent event = eventGenerator.generateArrival();
                 eventQueue.addEvent(event);
+
             }
+            //System.out.println(eventQueue.toString());
+
             AbstractEvent toHandle = eventQueue.getFirstAvailableEvent();
+            //System.out.println("Task to handle: " + toHandle.toString());
+
             clock.setCurrent(toHandle.getEventTime());
             if (toHandle instanceof ArrivalEvent){
                 controller.handleArrival(toHandle.getTask());
@@ -47,6 +53,9 @@ public class Simulation {
                 else
                     controller.getCloudService().handleCompletion(toHandle.getTask());
             }
+            //i++;
+
+
         }
     }
 }
