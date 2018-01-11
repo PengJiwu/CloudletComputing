@@ -33,6 +33,7 @@ public class EventGenerator {
             arrival += distributions.exponential(AppConfiguration.ARRIVAL_RATE_2);
             task = new TaskClassTwo(arrival);
         }
+
         Clock.getInstance().setArrival(arrival);
         //System.out.println("Task arrival: " + task.toString());
         return new ArrivalEvent(task);

@@ -19,7 +19,6 @@ public class AppConfiguration {
     public static double START = 0.0;
     public static double STOP = 0.0;
 
-
     public static void readConfiguration() {
         try {
             Properties prop = new Properties();

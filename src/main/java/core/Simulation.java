@@ -6,6 +6,7 @@ import event.AbstractEvent;
 import event.ArrivalEvent;
 import event.EventGenerator;
 import event.EventQueue;
+import stat.Performance;
 import utils.Clock;
 
 public class Simulation {
@@ -14,6 +15,7 @@ public class Simulation {
     public static Clock clock;
     public static EventGenerator eventGenerator;
     public static EventQueue eventQueue;
+    public static Performance performance;
 
     public static void main(String[] args) {
         AppConfiguration.readConfiguration();
@@ -28,10 +30,13 @@ public class Simulation {
         clock = Clock.getInstance();
         eventGenerator = new EventGenerator();
         eventQueue = EventQueue.getInstance();
+        performance = new Performance();
     }
 
     private static void run(){
         //int i = 0;
+
+
         while (clock.getArrival() == AppConfiguration.START || eventQueue.getQueueSize() > 0){
             if (clock.getArrival() < AppConfiguration.STOP /*&& i<10*/){
                 AbstractEvent event = eventGenerator.generateArrival();
@@ -43,15 +48,27 @@ public class Simulation {
             AbstractEvent toHandle = eventQueue.getFirstAvailableEvent();
             //System.out.println("Task to handle: " + toHandle.toString());
 
-            clock.setCurrent(toHandle.getEventTime());
+
+
+            clock.setNext(toHandle.getEventTime());
+
+            performance.updateArea();
+
+            clock.setCurrent(clock.getNext());
+
+
+
             if (toHandle instanceof ArrivalEvent){
                 controller.handleArrival(toHandle.getTask());
             }
             else{
+
                 if (toHandle.getTask().isCloudlet())
                     controller.getCloudletService().handleCompletion(toHandle.getTask());
+                    //aggiornare responseTime
                 else
                     controller.getCloudService().handleCompletion(toHandle.getTask());
+                    //aggiornare responseTime
             }
             //i++;
 
