@@ -18,6 +18,7 @@ public class AppConfiguration {
     public static double CLOUD_M2 = 0.0;
     public static double START = 0.0;
     public static double STOP = 0.0;
+    public static int BATCH_SIZE = 256;
 
     public static void readConfiguration() {
         try {
@@ -35,6 +36,7 @@ public class AppConfiguration {
             STOP = Double.parseDouble(prop.getProperty("STOP"));
             S = Integer.parseInt(prop.getProperty("S"));
             N = Integer.parseInt(prop.getProperty("N"));
+            BATCH_SIZE = Integer.parseInt(prop.getProperty("BATCH_SIZE"));
 /*            System.out.println( "SETUP_TIME: " + SETUP_TIME + "\n" +
                                 "N: " + N + "\n" +
                                 "S: " + S + "\n" +
@@ -43,7 +45,10 @@ public class AppConfiguration {
                                 "CLOUDLET_M1: " + CLOUDLET_M1 + "\n" +
                                 "CLOUDLET_M2: " + CLOUDLET_M2 + "\n" +
                                 "CLOUD_M1: " + CLOUD_M1 + "\n" +
-                                "CLOUD_M2: " + CLOUD_M2 + "\n");*/
+                                "CLOUD_M2: " + CLOUD_M2 + "\n" +
+                                "BATCH_SIZE: " + BATCH_SIZE + "\n" +
+                                "START: " + START + "\n" +
+                                "STOP: " + STOP + "\n");*/
         }
         catch (Exception e) {
             e.printStackTrace();

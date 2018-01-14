@@ -7,6 +7,7 @@ import event.ArrivalEvent;
 import event.EventGenerator;
 import event.EventQueue;
 import stat.Performance;
+import task.TaskClassOne;
 import utils.Clock;
 
 public class Simulation {
@@ -21,7 +22,7 @@ public class Simulation {
         AppConfiguration.readConfiguration();
         setupEnvironment();
         run();
-        //printSystemValues();
+        cleanEnvironment();
         System.exit(0);
     }
 
@@ -33,10 +34,14 @@ public class Simulation {
         performance = new Performance(controller);
     }
 
+    private static void cleanEnvironment(){
+        performance.closeWriters();
+    }
+
     private static void run(){
         //int i = 0;
 
-
+        boolean classOne = true;
         while (clock.getArrival() == AppConfiguration.START || eventQueue.getQueueSize() > 0){
             if (clock.getArrival() < AppConfiguration.STOP /*&& i<10*/){
                 AbstractEvent event = eventGenerator.generateArrival();
@@ -62,13 +67,15 @@ public class Simulation {
                 controller.handleArrival(toHandle.getTask());
             }
             else{
-
-                if (toHandle.getTask().isCloudlet())
+                classOne = (toHandle.getTask() instanceof TaskClassOne);
+                if (toHandle.getTask().isCloudlet()){
+                    performance.handleCloudletCompletion(classOne,toHandle.getTask().getCompletionTime());
                     controller.getCloudletService().handleCompletion(toHandle.getTask());
-                    //aggiornare responseTime
-                else
+                }
+                else{
+                    performance.handleCloudCompletion(classOne,toHandle.getTask().getCompletionTime());
                     controller.getCloudService().handleCompletion(toHandle.getTask());
-                    //aggiornare responseTime
+                }
             }
             //i++;
 

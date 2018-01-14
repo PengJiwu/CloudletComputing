@@ -35,6 +35,12 @@ public class Cloudlet {
     /* Event queue */
     private EventQueue eventQueue;
 
+    /* Task Class One last completion */
+    private double lastCompletionClassOne;
+
+    /* Task Class Two last completion */
+    private double lastCompletionClassTwo;
+
 
     public Cloudlet() {
         this.n1 = 0;
@@ -44,6 +50,8 @@ public class Cloudlet {
         this.distributions = Distributions.getInstance();
         this.taskList = new ArrayList<>();
         this.eventQueue = EventQueue.getInstance();
+        this.lastCompletionClassOne = 0.0;
+        this.lastCompletionClassTwo = 0.0;
     }
 
     public void assignServer(AbstractTask task){
@@ -100,10 +108,12 @@ public class Cloudlet {
         if (task instanceof TaskClassOne){
             this.n1--;
             this.classOneCompletion++;
+            this.lastCompletionClassOne = task.getCompletionTime();
         }
         else{
             this.n2--;
             this.classTwoCompletion++;
+            this.lastCompletionClassTwo = task.getCompletionTime();
         }
 
         //System.out.println("C CloudletVariables post completion: N1 = " + this.getN1() + " N2 = " + this.getN2());
@@ -112,6 +122,10 @@ public class Cloudlet {
         //System.out.println("TaskListCloud size = " + taskList.size());
         //System.out.println("TaskList: " + taskList.toString());
         //System.out.println("");
+    }
+
+    public double getLastCompletion(){
+        return Double.max(this.lastCompletionClassOne,this.lastCompletionClassTwo);
     }
 
 
@@ -148,5 +162,21 @@ public class Cloudlet {
 
     public void setClassTwoCompletion(Integer classTwoCompletion) {
         this.classTwoCompletion = classTwoCompletion;
+    }
+
+    public double getLastCompletionClassOne() {
+        return lastCompletionClassOne;
+    }
+
+    public void setLastCompletionClassOne(double lastCompletionClassOne) {
+        this.lastCompletionClassOne = lastCompletionClassOne;
+    }
+
+    public double getLastCompletionClassTwo() {
+        return lastCompletionClassTwo;
+    }
+
+    public void setLastCompletionClassTwo(double lastCompletionClassTwo) {
+        this.lastCompletionClassTwo = lastCompletionClassTwo;
     }
 }
