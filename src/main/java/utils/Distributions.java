@@ -29,7 +29,8 @@ public class Distributions {
         rvgs.rngs.selectStream(index);
     }
 
-    public double exponential(double param){
+    public double exponential(double param,int stream){
+        selectStream(stream);
         return this.rvgs.exponential(1/param);
     }
 

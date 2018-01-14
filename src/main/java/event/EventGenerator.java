@@ -16,7 +16,6 @@ public class EventGenerator {
     }
 
 
-    //todo
     public ArrivalEvent generateArrival(){
 
         distributions.selectStream(1);
@@ -24,13 +23,11 @@ public class EventGenerator {
         double arrival = Clock.getInstance().getArrival();
         AbstractTask task;
         if(type <= 1.5){
-            distributions.selectStream(2);
-            arrival += distributions.exponential(AppConfiguration.ARRIVAL_RATE_1);
+            arrival += distributions.exponential(AppConfiguration.ARRIVAL_RATE_1,2);
             task = new TaskClassOne(arrival);
         }
         else{
-            distributions.selectStream(3);
-            arrival += distributions.exponential(AppConfiguration.ARRIVAL_RATE_2);
+            arrival += distributions.exponential(AppConfiguration.ARRIVAL_RATE_2,3);
             task = new TaskClassTwo(arrival);
         }
 

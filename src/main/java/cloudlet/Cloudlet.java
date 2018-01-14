@@ -48,12 +48,10 @@ public class Cloudlet {
 
     public void assignServer(AbstractTask task){
         if (task instanceof TaskClassOne){
-            distributions.selectStream(2);//TODO usage of selectStream
-            task.setServiceTime(distributions.exponential(AppConfiguration.CLOUDLET_M1));
+            task.setServiceTime(distributions.exponential(AppConfiguration.CLOUDLET_M1,4));
         }
         else{
-            distributions.selectStream(3); // TODO usage of selectStream
-            task.setServiceTime(distributions.exponential(AppConfiguration.CLOUDLET_M2));
+            task.setServiceTime(distributions.exponential(AppConfiguration.CLOUDLET_M2,5));
         }
         this.incrementPopulation(task);
         taskList.add(task);
@@ -79,12 +77,10 @@ public class Cloudlet {
             i++;
         }
         taskList.remove(index);
-        distributions.selectStream(2);//TODO usage of selectStream
         eventQueue.dropElement(new CompletionEvent(toStop));
         toStop.setSwapped(true);
         this.n2--;
         toStop.setSwapTime(swappedTime);
-        toStop.setSetupTime(distributions.exponential(AppConfiguration.SETUP_TIME));
         return toStop;
     }
 

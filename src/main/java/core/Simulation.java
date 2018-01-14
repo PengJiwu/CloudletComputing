@@ -30,7 +30,7 @@ public class Simulation {
         clock = Clock.getInstance();
         eventGenerator = new EventGenerator();
         eventQueue = EventQueue.getInstance();
-        performance = new Performance();
+        performance = new Performance(controller);
     }
 
     private static void run(){

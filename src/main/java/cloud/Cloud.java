@@ -47,15 +47,13 @@ public class Cloud {
 
     public void assignServer(AbstractTask task){
         if (task instanceof TaskClassOne){
-            distributions.selectStream(2);//TODO usage of selectStream
-            task.setServiceTime(distributions.exponential(AppConfiguration.CLOUD_M1));
+            task.setServiceTime(distributions.exponential(AppConfiguration.CLOUD_M1,6));
         }
         else {
-            distributions.selectStream(3); // TODO usage of selectStream
-            task.setServiceTime(distributions.exponential(AppConfiguration.CLOUD_M2));
+            task.setServiceTime(distributions.exponential(AppConfiguration.CLOUD_M2,7));
             TaskClassTwo swapped = (TaskClassTwo) task;
             if (swapped.isSwapped())
-                swapped.setSetupTime(distributions.exponential(AppConfiguration.SETUP_TIME));
+                swapped.setSetupTime(distributions.exponential(AppConfiguration.SETUP_TIME,8));
             task = swapped;
         }
         this.incrementPopulation(task);
