@@ -9,6 +9,7 @@ import task.TaskClassOne;
 import task.TaskClassTwo;
 import utils.Distributions;
 
+import javax.sql.rowset.serial.SerialRef;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,10 +75,12 @@ public class Cloud {
     }
 
     private void incrementPopulation(AbstractTask task){
-        if (task instanceof TaskClassOne)
+        if (task instanceof TaskClassOne) {
             this.n1++;
-        else
+        }
+        else {
             this.n2++;
+        }
     }
 
     public void handleCompletion(AbstractTask task) {

@@ -107,3 +107,6 @@ local.properties
 .DS_Store
 CloudletComputing.iml
 /target/
+
+
+/output

@@ -81,5 +81,7 @@ public class Simulation {
 
 
         }
+
+        performance.printResults();
     }
 }

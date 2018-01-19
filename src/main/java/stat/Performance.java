@@ -46,6 +46,7 @@ public class Performance {
     private double batchCloudPopulation;
     private double batchCloud1Population;
     private double batchCloud2Population;
+
     private PrintWriter systemUtilizationWriter;
     private PrintWriter systemThroughputWriter;
     private PrintWriter systemResponseTimeWriter;
@@ -89,29 +90,44 @@ public class Performance {
 
     }
 
-    private void initWriters() {
-
+    private static PrintWriter createPrintWriter(String filePath) {
+        File aFile = new File(filePath);
+        PrintWriter aWriter = null;
         try {
-            systemUtilizationWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            systemThroughputWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            systemResponseTimeWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloudletResponseTimeWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloudlet1ResponseTimeWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloudlet2ResponseTimeWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloudResponseTimeWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloud1ResponseTimeWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloud2ResponseTimeWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloud2ResponseTimeWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloudletPopulationWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloudlet1PopulationWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloudlet2PopulationWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloudPopulationWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloud1PopulationWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
-            cloud2PopulationWriter = new PrintWriter(new BufferedWriter(new FileWriter("")));
+            aFile.createNewFile();
+            aWriter = new PrintWriter(aFile);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
+        return aWriter;
+    }
+    private void initWriters() {
+
+        createFile();
+
+        // general system stats
+        systemUtilizationWriter = createPrintWriter("output/system/utilization.txt");
+        systemThroughputWriter = createPrintWriter("output/system/throughput.txt");
+        systemResponseTimeWriter = createPrintWriter("output/system/response_time.txt");
+
+        // cloudlet stats
+        cloudletResponseTimeWriter = createPrintWriter("output/cloudlet/response_time.txt");
+        cloudlet1ResponseTimeWriter = createPrintWriter("output/cloudlet/response_time_class_one.txt");
+        cloudlet2ResponseTimeWriter = createPrintWriter("output/cloudlet/response_time_class_two.txt");
+
+        cloudletPopulationWriter = createPrintWriter("output/cloudlet/population.txt");
+        cloudlet1PopulationWriter = createPrintWriter("output/cloudlet/population_class_one.txt");
+        cloudlet2PopulationWriter = createPrintWriter("output/cloudlet/population_class_two.txt");
+
+        // cloud stats
+        cloudResponseTimeWriter = createPrintWriter("output/cloud/response_time.txt");
+        cloud1ResponseTimeWriter = createPrintWriter("output/cloud/response_time_class_one.txt");
+        cloud2ResponseTimeWriter = createPrintWriter("output/cloud/response_time_class_two.txt");
+
+        cloudPopulationWriter = createPrintWriter("output/cloud/population.txt");
+        cloud1PopulationWriter = createPrintWriter("output/cloud/population_class_one.txt");
+        cloud2PopulationWriter = createPrintWriter("output/cloud/population_class_two.txt");
     }
 
     public void closeWriters(){
@@ -135,38 +151,33 @@ public class Performance {
     }
 
 //
+    private static void makeDir(String dir) {
+        File directory = new File(String.valueOf(dir));
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+    }
 
     /**
      * creates file for ResponseTime and Population for single class and global for cloudlet and cloud
      *
      */
-    public static void createFile() {
+    protected static void createFile() {
         String path;
-        File directory;
 
         path = System.getProperty("user.dir");
-        directory = new File(String.valueOf(path+"/output"));
-        if (! directory.exists()){
-            directory.mkdir();
-        }
 
-        path = System.getProperty("user.dir");
-        directory = new File(String.valueOf(path+"/output/cloudletResponseTime"));
-        if (! directory.exists()){
-            directory.mkdir();
-        }
+        String outputDir = path+"/output";
+        makeDir(outputDir);
 
-        path = System.getProperty("user.dir");
-        directory = new File(String.valueOf(path+"/output/cloudlet1ResponseTime"));
-        if (! directory.exists()){
-            directory.mkdir();
-        }
+        String dir = outputDir+"/system";
+        makeDir(dir);
 
-        path = System.getProperty("user.dir");
-        directory = new File(String.valueOf(path+"/output/cloudlet2ResponseTime"));
-        if (! directory.exists()){
-            directory.mkdir();
-        }
+        dir = outputDir+"/cloudlet";
+        makeDir(dir);
+
+        dir = outputDir+"/cloud";
+        makeDir(dir);
 
     }
 

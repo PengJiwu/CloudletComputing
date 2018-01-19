@@ -28,8 +28,9 @@ public class Controller {
         //System.out.println("A CloudVariables: N1 = " + cloudService.getN1() + " N2 = " + cloudService.getN2());
 
         if (task instanceof TaskClassOne){
-            if (cloudletService.getN1() == AppConfiguration.N)
+            if (cloudletService.getN1() == AppConfiguration.N) {
                 cloudService.assignServer(task);
+            }
             else if (cloudletService.getN1() + cloudletService.getN2() < AppConfiguration.S){
                 cloudletService.assignServer(task);
             }
