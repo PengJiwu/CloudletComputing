@@ -47,6 +47,10 @@ public class Performance {
     private double batchCloud1Population;
     private double batchCloud2Population;
 
+    private double percentage2Preemption;
+    private int totalClassTwoPreempion;
+    private int totalClassTwoAssigned;
+
     private PrintWriter systemUtilizationWriter;
     private PrintWriter systemThroughputWriter;
     private PrintWriter systemResponseTimeWriter;
@@ -85,6 +89,8 @@ public class Performance {
         cloud1ResponseTime = 0.0;
         cloud2ResponseTime = 0.0;
         systemResponseTime = 0.0;
+        percentage2Preemption = 0.0;
+
         resetIndexes();
         initWriters();
 
@@ -182,6 +188,7 @@ public class Performance {
     }
 
     public void updateArea() {
+        // statistics for population indexes
 
         n1 = controller.getCloudletService().getN1();
         n2 = controller.getCloudletService().getN2();
@@ -190,17 +197,19 @@ public class Performance {
 
         number = n1 + n2 + cloud_n1 + cloud_n2;
 
-
-        if (number > 0)  {                               /* update system integrals */
+        /* update system integrals */
+        if (number > 0)  {
             systemArea.service += (clock.getNext() - clock.getCurrent());
         }
-        if (n1 + n2 > 0)  {                              /* update cloudlet integrals */
+        /* update cloudlet integrals */
+        if (n1 + n2 > 0)  {
             cloudletArea.node += (clock.getNext() - clock.getCurrent())*(n1 + n2);
             cloudletArea.service += (clock.getNext() - clock.getCurrent());
             cloudlet1Area.node += (clock.getNext() - clock.getCurrent())*n1;
             cloudlet2Area.node += (clock.getNext() - clock.getCurrent())*n2;
         }
-        if (number - (n1 + n2) > 0)  {                   /* update cloud integrals */
+        /* update cloud integrals */
+        if (cloud_n1 + cloud_n2 > 0)  {
             cloudArea.node += (clock.getNext() - clock.getCurrent())*(number - (n1 + n2));
             cloudArea.service += (clock.getNext() - clock.getCurrent());
             cloud1Area.node += (clock.getNext() - clock.getCurrent())*cloud_n1;
@@ -208,16 +217,27 @@ public class Performance {
         }
     }
 
+
     public void handleCloudletCompletion(boolean classOne,double currentResponseTime) {
+
+        // x_i is currentResponseTime
         double delta = 0.0;
         if (classOne){
+            // delta_i = t_i - t_i-1
+            // getCurrent is t_i
+            // getLastCompletionClassOne() is t_i-1
+
+            /* update response time with Welford's Sample Path Algorithm */
             delta = clock.getCurrent() - controller.getCloudletService().getLastCompletionClassOne();
+            // x_i = x_i-1 + (delta / t_i)*(x_i - x_i-1)
             cloudlet1ResponseTime += (delta/clock.getCurrent()*(currentResponseTime - cloudlet1ResponseTime));
         }
         else{
+            /* update response time with Welford's Sample Path Algorithm */
             delta = clock.getCurrent() - controller.getCloudletService().getLastCompletionClassTwo();	/* update response time with Welford's Sample Path Algorithm */
             cloudlet2ResponseTime +=  (delta/clock.getCurrent()*(currentResponseTime - cloudlet2ResponseTime));
         }
+        // global indexes
         delta = clock.getCurrent() - controller.getCloudletService().getLastCompletion();
         cloudletResponseTime += (delta/clock.getCurrent()*(currentResponseTime - cloudletResponseTime));
         handleCompletion(delta,currentResponseTime);
@@ -226,11 +246,13 @@ public class Performance {
     public void handleCloudCompletion(boolean classOne, double currentResponseTime) {
         double delta = 0.0;
         if (classOne){
+            /* update response time with Welford's Sample Path Algorithm */
             delta = clock.getCurrent() - controller.getCloudService().getLastCompletionClassOne();
             cloud1ResponseTime += (delta/clock.getCurrent()*(currentResponseTime - cloud1ResponseTime));
         }
         else{
-            delta = clock.getCurrent() - controller.getCloudService().getLastCompletionClassTwo();	/* update response time with Welford's Sample Path Algorithm */
+            /* update response time with Welford's Sample Path Algorithm */
+            delta = clock.getCurrent() - controller.getCloudService().getLastCompletionClassTwo();
             cloud2ResponseTime +=  (delta/clock.getCurrent()*(currentResponseTime - cloud2ResponseTime));
         }
         delta = clock.getCurrent() - controller.getCloudService().getLastCompletion();
@@ -238,8 +260,9 @@ public class Performance {
         handleCompletion(delta,currentResponseTime);
     }
 
-    public void handleCompletion(double delta,double currentResponseTime){
-        systemResponseTime += (delta/clock.getCurrent()*(currentResponseTime - systemResponseTime));	/* update response time with Welford's Sample Path Algorithm */
+    protected void handleCompletion(double delta,double currentResponseTime){
+        /* update response time with Welford's Sample Path Algorithm */
+        systemResponseTime += (delta/clock.getCurrent()*(currentResponseTime - systemResponseTime));
 
 /*        if(systemResponseTime < 0)
             System.out.println("ciao ");*/
@@ -273,7 +296,7 @@ public class Performance {
         }
     }
 
-    private void writeFiles() {
+    protected void writeFiles() {
         systemUtilizationWriter.println(batchSystemUtilization / AppConfiguration.BATCH_SIZE);
         systemResponseTimeWriter.println(batchSystemResponseTime / AppConfiguration.BATCH_SIZE);
         systemThroughputWriter.println(batchSystemThroughput / AppConfiguration.BATCH_SIZE);
@@ -321,31 +344,53 @@ public class Performance {
                 controller.getCloudService().getClassOneCompletion() +
                 controller.getCloudService().getClassTwoCompletion();
 
-        int cloudletIndex = controller.getCloudletService().getClassOneCompletion() + controller.getCloudletService().getClassTwoCompletion();
-        int cloudIndex = controller.getCloudService().getClassOneCompletion() + controller.getCloudService().getClassTwoCompletion();
+        int cloudletClassOneCompletion = controller.getCloudletService().getClassOneCompletion();
+        int cloudletClassTwoCompletion = controller.getCloudletService().getClassTwoCompletion();
+        int cloudletIndex = cloudletClassOneCompletion + cloudletClassTwoCompletion;
 
-        System.out.println("\nfor " + index + " jobs");
 
-        System.out.println("\n   system utilization ............. =   " + f.format(systemArea.service / clock.getCurrent()));
-        System.out.println("   system mean response time....... =   " + f.format(systemResponseTime));
-        System.out.println("   system throughput .............. =   " + f.format(index / clock.getCurrent()));
+        int cloudClassOneCompletion = controller.getCloudService().getClassOneCompletion();
+        int cloudClassTwoCompletion = controller.getCloudService().getClassTwoCompletion();
+        int cloudIndex = cloudClassOneCompletion + cloudClassTwoCompletion;
 
-        System.out.println("\n   cloudlet utilization ........... =   " + f.format(cloudletArea.service / clock.getCurrent()));
-        System.out.println("   cloudlet mean population ....... =   " + f.format(cloudletArea.node / clock.getCurrent()));
-        System.out.println("   type 1.......................... =   " + f.format(cloudlet1Area.node / clock.getCurrent()));
-        System.out.println("   type 2.......................... =   " + f.format(cloudlet2Area.node / clock.getCurrent()));
-        System.out.println("   cloudlet mean response time..... =   " + f.format(cloudletResponseTime));
-        System.out.println("   type 1.......................... =   " + f.format(cloudlet1ResponseTime));
-        System.out.println("   type 2.......................... =   " + f.format(cloudlet2ResponseTime));
-        System.out.println("   cloudlet throughput ............ =   " + f.format(cloudletIndex /clock.getCurrent()));
 
-        System.out.println("\n   cloud utilization .............. =   " + f.format(cloudArea.service / clock.getCurrent()));
-        System.out.println("   cloud mean population .......... =   " + f.format(cloudArea.node / clock.getCurrent()));
-        System.out.println("   type 1.......................... =   " + f.format(cloud1Area.node / clock.getCurrent()));
-        System.out.println("   type 2.......................... =   " + f.format(cloud2Area.node / clock.getCurrent()));
-        System.out.println("   cloud mean response time........ =   " + f.format(cloudResponseTime));
-        System.out.println("   type 1.......................... =   " + f.format(cloud1ResponseTime));
-        System.out.println("   type 2.......................... =   " + f.format(cloud2ResponseTime));
-        System.out.println("   cloud throughput ............... =   " + f.format(cloudIndex / clock.getCurrent()));
+        percentage2Preemption = controller.getCloudletService().getPercentage2Preemption() * 100.0;
+        totalClassTwoPreempion = controller.getCloudletService().getTotalClassTwoPreempion();
+        totalClassTwoAssigned = controller.getCloudletService().getTotalClassTwoAssigned();
+
+        System.out.println("\n\tfor " + index + " jobs");
+
+        System.out.println("\n\tsystem utilization ............. =   " + f.format(systemArea.service / clock.getCurrent()));
+        System.out.println("\tsystem mean response time....... =   " + f.format(systemResponseTime));
+        System.out.println("\tsystem throughput .............. =   " + f.format(index / clock.getCurrent()));
+
+        System.out.println("\n\tcloudlet utilization ........... =   " + f.format(cloudletArea.service / clock.getCurrent()));
+        System.out.println("\tcloudlet mean population ....... =   " + f.format(cloudletArea.node / clock.getCurrent()));
+        System.out.println("\ttype 1.......................... =   " + f.format(cloudlet1Area.node / clock.getCurrent()));
+        System.out.println("\ttype 2.......................... =   " + f.format(cloudlet2Area.node / clock.getCurrent()));
+        System.out.println("\tcloudlet mean response time..... =   " + f.format(cloudletResponseTime));
+        System.out.println("\ttype 1.......................... =   " + f.format(cloudlet1ResponseTime));
+        System.out.println("\ttype 2.......................... =   " + f.format(cloudlet2ResponseTime));
+        System.out.println("\tcloudlet throughput ............ =   " + f.format(cloudletIndex /clock.getCurrent()));
+
+        System.out.println("\n\tcloud utilization .............. =   " + f.format(cloudArea.service / clock.getCurrent()));
+        System.out.println("\tcloud mean population .......... =   " + f.format(cloudArea.node / clock.getCurrent()));
+        System.out.println("\ttype 1.......................... =   " + f.format(cloud1Area.node / clock.getCurrent()));
+        System.out.println("\ttype 2.......................... =   " + f.format(cloud2Area.node / clock.getCurrent()));
+        System.out.println("\tcloud mean response time........ =   " + f.format(cloudResponseTime));
+        System.out.println("\ttype 1.......................... =   " + f.format(cloud1ResponseTime));
+        System.out.println("\ttype 2.......................... =   " + f.format(cloud2ResponseTime));
+        System.out.println("\tcloud throughput ............... =   " + f.format(cloudIndex / clock.getCurrent()));
+
+        System.out.println("\n\teffective cloudlet throughput .. =   " + f.format(cloudletIndex /clock.getCurrent()));
+        System.out.println("\ttype 1.......................... =   " + f.format(cloudletClassOneCompletion /clock.getCurrent()));
+        System.out.println("\ttype 2.......................... =   " + f.format(cloudletClassTwoCompletion /clock.getCurrent()));
+
+        System.out.println("\n\tpercentage type 2 preempted .... =   " + f.format(percentage2Preemption) +" %");
+        System.out.println("\ttotal task 2 preempted ......... =   " + totalClassTwoPreempion);
+
+
+
+
     }
 }

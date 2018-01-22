@@ -41,6 +41,15 @@ public class Cloudlet {
     /* Task Class Two last completion */
     private double lastCompletionClassTwo;
 
+    /* Percentage of Task Class Two */
+    private double percentage2Preemption;
+
+    /* Total number of Task Class Two preemted*/
+    private int totalClassTwoPreempion;
+
+    /* Total number of Task Class Two assigned to Cloudlete*/
+    private int totalClassTwoAssigned;
+
 
     public Cloudlet() {
         this.n1 = 0;
@@ -52,6 +61,7 @@ public class Cloudlet {
         this.eventQueue = EventQueue.getInstance();
         this.lastCompletionClassOne = 0.0;
         this.lastCompletionClassTwo = 0.0;
+        this.percentage2Preemption = 0.0;
     }
 
     public void assignServer(AbstractTask task){
@@ -77,11 +87,14 @@ public class Cloudlet {
         if (toStop!=null) {
             taskList.remove(toStop);
 
-
             eventQueue.dropElement(new CompletionEvent(toStop));
 
             toStop.setSwapped(true);
             this.n2--;
+
+            this.totalClassTwoPreempion++;
+            updatePercentage2Preemption();
+
             toStop.setSwapTime(swappedTime);
         }
 
@@ -103,12 +116,30 @@ public class Cloudlet {
         return toStop;
     }
 
+    private void updatePercentage2Preemption() {
+        this.percentage2Preemption = (double) this.totalClassTwoPreempion / (double) this.totalClassTwoAssigned;
+    }
+
+    public double getPercentage2Preemption() {
+        return percentage2Preemption;
+    }
+
+    public Integer getTotalClassTwoPreempion() {
+        return totalClassTwoPreempion;
+    }
+
+    public Integer getTotalClassTwoAssigned() {
+        return totalClassTwoAssigned;
+    }
 
     private void incrementPopulation(AbstractTask task){
-        if (task instanceof TaskClassOne)
+        if (task instanceof TaskClassOne) {
             this.n1++;
-        else
+        }
+        else {
             this.n2++;
+            this.totalClassTwoAssigned++;
+        }
     }
 
     public void handleCompletion(AbstractTask task) {
