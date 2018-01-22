@@ -72,23 +72,34 @@ public class Cloudlet {
 
     public AbstractTask stopTask(double swappedTime) {
         TaskClassTwo toStop = null;
-        double max = 0.0;
-        int i = 0,index=0;
-        for (AbstractTask task : taskList){
-            if (task instanceof TaskClassTwo){
-                if (toStop == null)
-                    toStop = (TaskClassTwo) task;
-                else if (task.getCompletionTime() > toStop.getCompletionTime())
-                    toStop = (TaskClassTwo) task;
-                index = i;
-            }
-            i++;
+        toStop = (TaskClassTwo) findTaskWithMaxCompletionTime();
+
+        if (toStop!=null) {
+            taskList.remove(toStop);
+
+
+            eventQueue.dropElement(new CompletionEvent(toStop));
+
+            toStop.setSwapped(true);
+            this.n2--;
+            toStop.setSwapTime(swappedTime);
         }
-        taskList.remove(index);
-        eventQueue.dropElement(new CompletionEvent(toStop));
-        toStop.setSwapped(true);
-        this.n2--;
-        toStop.setSwapTime(swappedTime);
+
+        return toStop;
+    }
+
+    protected AbstractTask findTaskWithMaxCompletionTime() {
+        double maxTime = 0.0;
+        AbstractTask toStop = null;
+
+        for (AbstractTask task : taskList) {
+            if (task instanceof TaskClassTwo){
+                if (maxTime<= task.getCompletionTime()) {
+                    maxTime = task.getCompletionTime();
+                    toStop = task;
+                }
+            }
+        }
         return toStop;
     }
 
