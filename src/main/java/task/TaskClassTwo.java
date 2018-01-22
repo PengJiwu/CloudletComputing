@@ -31,7 +31,9 @@ public class TaskClassTwo extends AbstractTask {
      * Compute Completion Time
      */
     public double getCompletionTime() {
-        return this.isSwapped()? this.getSwapTime() + this.getServiceTime() + this.getSetupTime() : this.getArrivalTime() + this.getServiceTime();
+        return this.isSwapped()
+                ? this.getSwapTime() + this.getServiceTime() + this.getSetupTime()
+                : this.getArrivalTime() + this.getServiceTime();
     }
 
     /**

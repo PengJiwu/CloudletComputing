@@ -39,9 +39,7 @@ public class Simulation {
     }
 
     private static void run(){
-        //int i = 0;
 
-        boolean classOne = true;
         while (clock.getArrival() == AppConfiguration.START || eventQueue.getQueueSize() > 0){
             if (clock.getArrival() < AppConfiguration.STOP /*&& i<10*/){
                 AbstractEvent event = eventGenerator.generateArrival();
@@ -54,7 +52,6 @@ public class Simulation {
             //System.out.println("Task to handle: " + toHandle.toString());
 
 
-
             clock.setNext(toHandle.getEventTime());
 
             performance.updateArea();
@@ -62,23 +59,19 @@ public class Simulation {
             clock.setCurrent(clock.getNext());
 
 
-
             if (toHandle instanceof ArrivalEvent){
                 controller.handleArrival(toHandle.getTask());
             }
             else{
-                classOne = (toHandle.getTask() instanceof TaskClassOne);
                 if (toHandle.getTask().isCloudlet()){
-                    performance.handleCloudletCompletion(classOne,toHandle.getTask().getCompletionTime());
+                    performance.handleCloudletCompletion(toHandle.getTask());
                     controller.getCloudletService().handleCompletion(toHandle.getTask());
                 }
                 else{
-                    performance.handleCloudCompletion(classOne,toHandle.getTask().getCompletionTime());
+                    performance.handleCloudCompletion(toHandle.getTask());
                     controller.getCloudService().handleCompletion(toHandle.getTask());
                 }
             }
-            //i++;
-
 
         }
 

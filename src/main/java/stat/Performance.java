@@ -2,6 +2,9 @@ package stat;
 
 import cloudlet.Controller;
 import config.AppConfiguration;
+import task.AbstractTask;
+import task.TaskClassOne;
+import task.TaskClassTwo;
 import utils.Clock;
 
 import java.io.*;
@@ -10,78 +13,46 @@ import java.text.DecimalFormat;
 
 public class Performance {
 
-
-    public static Area systemArea;
-    public static Area cloudletArea;
-    public static Area cloudlet1Area;
-    public static Area cloudlet2Area;
-    public static Area cloudArea;
-    public static Area cloud1Area;
-    public static Area cloud2Area;
-
-    public Clock clock;
-    public Controller controller;
-    public int n1, n2, cloud_n1, cloud_n2;
-    public int number = 0;
+    protected BatchManager batchman;
 
 
-    private double batchSystemUtilization;
-    private double batchSystemResponseTime;
-    private double batchSystemThroughput;
-    private double batchCloudletResponseTime;
-    private double batchCloudlet2ResponseTime;
-    private double batchCloudlet1ResponseTime;
-    private double batchCloudResponseTime;
-    private double batchCloud1ResponseTime;
-    private double batchCloud2ResponseTime;
-    private double batchCloudletPopulation;
-    private double batchCloudlet1Population;
-    private double batchCloudlet2Population;
-    private double batchCloudPopulation;
-    private double batchCloud1Population;
-    private double batchCloud2Population;
+    protected static Area systemArea;
+    protected static Area cloudletArea;
+    protected static Area cloudlet1Area;
+    protected static Area cloudlet2Area;
+    protected static Area cloudArea;
+    protected static Area cloud1Area;
+    protected static Area cloud2Area;
 
-    private double percentage2Preemption;
-    private int totalClassTwoPreempion;
-    private int totalClassTwoAssigned;
+    protected Clock clock;
+    protected Controller controller;
+    protected int n1, n2, cloud_n1, cloud_n2;
+    protected int number = 0;
+
+
+    protected double percentage2Preemption;
+    protected int totalClassTwoPreempion;
+    protected int totalClassTwoAssigned;
 
     /**
      * Mean value variables
      */
-    private MeanValue cloudlet1ResponseTimeMV;
-    private MeanValue cloudlet2ResponseTimeMV;
-    private MeanValue cloudletResponseTimeMV;
+    protected MeanValue cloudlet1ResponseTimeMV;
+    protected MeanValue cloudlet2ResponseTimeMV;
+    protected MeanValue cloudletResponseTimeMV;
 
-    private MeanValue cloud1ResponseTimeMV;
-    private MeanValue cloud2ResponseTimeMV;
-    private MeanValue cloudResponseTimeMV;
+    protected MeanValue cloud1ResponseTimeMV;
+    protected MeanValue cloud2ResponseTimeMV;
+    protected MeanValue cloudResponseTimeMV;
 
-    private MeanValue systemResponseTimeMV;
+    protected MeanValue systemResponseTimeMV;
 
-    private MeanValue class2PreemptedResponseTime;
-
-
+    protected MeanValue class2PreemptedResponseTime;
 
 
-    private PrintWriter systemUtilizationWriter;
-    private PrintWriter systemThroughputWriter;
-    private PrintWriter systemResponseTimeWriter;
-    private PrintWriter cloudletResponseTimeWriter;
-    private PrintWriter cloudlet1ResponseTimeWriter;
-    private PrintWriter cloudlet2ResponseTimeWriter;
-    private PrintWriter cloudResponseTimeWriter;
-    private PrintWriter cloud1ResponseTimeWriter;
-    private PrintWriter cloud2ResponseTimeWriter;
-    private PrintWriter cloudletPopulationWriter;
-    private PrintWriter cloudlet1PopulationWriter;
-    private PrintWriter cloudlet2PopulationWriter;
-    private PrintWriter cloudPopulationWriter;
-    private PrintWriter cloud1PopulationWriter;
-    private PrintWriter cloud2PopulationWriter;
+    public Performance(Controller c) {
 
-    public Performance(Controller controller) {
-
-        this.controller = controller;
+        controller = c;
         clock = Clock.getInstance();
         systemArea = new Area();
         cloudletArea = new Area();
@@ -98,9 +69,7 @@ public class Performance {
         percentage2Preemption = 0.0;
 
         initMeanValues();
-
-        resetIndexes();
-        initWriters();
+        batchman = new BatchManager(this);
 
     }
 
@@ -116,97 +85,6 @@ public class Performance {
         systemResponseTimeMV = new MeanValue();
 
         class2PreemptedResponseTime = new MeanValue();
-    }
-
-    private static PrintWriter createPrintWriter(String filePath) {
-        File aFile = new File(filePath);
-        PrintWriter aWriter = null;
-        try {
-            aFile.createNewFile();
-            aWriter = new PrintWriter(aFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-        return aWriter;
-    }
-    private void initWriters() {
-
-        createFile();
-
-        // general system stats
-        systemUtilizationWriter = createPrintWriter("output/system/utilization.txt");
-        systemThroughputWriter = createPrintWriter("output/system/throughput.txt");
-        systemResponseTimeWriter = createPrintWriter("output/system/response_time.txt");
-
-        // cloudlet stats
-        cloudletResponseTimeWriter = createPrintWriter("output/cloudlet/response_time.txt");
-        cloudlet1ResponseTimeWriter = createPrintWriter("output/cloudlet/response_time_class_one.txt");
-        cloudlet2ResponseTimeWriter = createPrintWriter("output/cloudlet/response_time_class_two.txt");
-
-        cloudletPopulationWriter = createPrintWriter("output/cloudlet/population.txt");
-        cloudlet1PopulationWriter = createPrintWriter("output/cloudlet/population_class_one.txt");
-        cloudlet2PopulationWriter = createPrintWriter("output/cloudlet/population_class_two.txt");
-
-        // cloud stats
-        cloudResponseTimeWriter = createPrintWriter("output/cloud/response_time.txt");
-        cloud1ResponseTimeWriter = createPrintWriter("output/cloud/response_time_class_one.txt");
-        cloud2ResponseTimeWriter = createPrintWriter("output/cloud/response_time_class_two.txt");
-
-        cloudPopulationWriter = createPrintWriter("output/cloud/population.txt");
-        cloud1PopulationWriter = createPrintWriter("output/cloud/population_class_one.txt");
-        cloud2PopulationWriter = createPrintWriter("output/cloud/population_class_two.txt");
-    }
-
-    public void closeWriters(){
-        systemUtilizationWriter.close();
-        systemResponseTimeWriter.close();
-        systemThroughputWriter.close();
-
-        cloudletResponseTimeWriter.close();
-        cloudlet1ResponseTimeWriter.close();
-        cloudlet2ResponseTimeWriter.close();
-        cloudResponseTimeWriter.close();
-        cloud1ResponseTimeWriter.close();
-        cloud2ResponseTimeWriter.close();
-
-        cloudletPopulationWriter.close();
-        cloudlet1PopulationWriter.close();
-        cloudlet2PopulationWriter.close();
-        cloudPopulationWriter.close();
-        cloud1PopulationWriter.close();
-        cloud2PopulationWriter.close();
-    }
-
-//
-    private static void makeDir(String dir) {
-        File directory = new File(String.valueOf(dir));
-        if (! directory.exists()){
-            directory.mkdir();
-        }
-    }
-
-    /**
-     * creates file for ResponseTime and Population for single class and global for cloudlet and cloud
-     *
-     */
-    protected static void createFile() {
-        String path;
-
-        path = System.getProperty("user.dir");
-
-        String outputDir = path+"/output";
-        makeDir(outputDir);
-
-        String dir = outputDir+"/system";
-        makeDir(dir);
-
-        dir = outputDir+"/cloudlet";
-        makeDir(dir);
-
-        dir = outputDir+"/cloud";
-        makeDir(dir);
-
     }
 
     public void updateArea() {
@@ -240,8 +118,10 @@ public class Performance {
     }
 
 
-    public void handleCloudletCompletion(boolean classOne,double currentResponseTime) {
+    public void handleCloudletCompletion(AbstractTask task) {
+        double currentResponseTime = task.getCompletionTime();
         double cur_event = clock.getCurrent();
+        boolean classOne = (task instanceof TaskClassOne);
 
         if (classOne){
             double prev_event = controller.getCloudletService().getLastCompletionClassOne();
@@ -258,16 +138,31 @@ public class Performance {
 
     }
 
-    public void handleCloudCompletion(boolean classOne, double currentResponseTime) {
+    public void handleCloudCompletion(AbstractTask task) {
+        double currentResponseTime = task.getCompletionTime();
+        boolean classOne = (task instanceof TaskClassOne);
         double cur_event = clock.getCurrent();
 
         if (classOne){
+            // class One completion on cloud
             double prev_event = controller.getCloudService().getLastCompletionClassOne();
             cloud1ResponseTimeMV.addElement(currentResponseTime,cur_event,prev_event);
         }
         else{
+            // class Two completion on cloud
             double prev_event = controller.getCloudService().getLastCompletionClassTwo();
             cloud2ResponseTimeMV.addElement(currentResponseTime,cur_event,prev_event);
+
+            /*
+            TaskClassTwo t2 = (TaskClassTwo) task;
+            if (t2.isSwapped()) {
+                // update statistics for preempted task
+                // TODO
+                double preemptedResponseTime = cur_event - task.getArrivalTime();
+                double prev_preemp_event = controller.getCloudService().getLastCompletionClassTwo();
+                class2PreemptedResponseTime.addElement(preemptedResponseTime,cur_event,prev_preemp_event);
+            }
+            */
         }
 
         double prev_event = controller.getCloudService().getLastCompletion();
@@ -285,68 +180,12 @@ public class Performance {
                     controller.getCloudService().getClassOneCompletion() +
                     controller.getCloudService().getClassTwoCompletion();
 
-        batchSystemUtilization += systemArea.service / clock.getCurrent();
-        batchSystemResponseTime += systemResponseTimeMV.getMean();
-        batchSystemThroughput += index / clock.getCurrent();
+        batchman.updateBatch(index);
 
-        batchCloudletResponseTime += cloudletResponseTimeMV.getMean();
-        batchCloudlet1ResponseTime += cloudlet1ResponseTimeMV.getMean();
-        batchCloudlet2ResponseTime += cloudlet2ResponseTimeMV.getMean();
-        batchCloudResponseTime += cloudResponseTimeMV.getMean();
-        batchCloud1ResponseTime += cloud1ResponseTimeMV.getMean();
-        batchCloud2ResponseTime += cloud2ResponseTimeMV.getMean();
-
-        batchCloudletPopulation += cloudletArea.node / clock.getCurrent();
-        batchCloudlet1Population += cloudlet1Area.node / clock.getCurrent();
-        batchCloudlet2Population += cloudlet2Area.node / clock.getCurrent();
-        batchCloudPopulation += cloudArea.node / clock.getCurrent();
-        batchCloud1Population += cloud1Area.node / clock.getCurrent();
-        batchCloud2Population += cloud2Area.node / clock.getCurrent();
-
-        if (index % AppConfiguration.BATCH_SIZE == 0){
-            writeFiles();
-            resetIndexes();
-        }
     }
 
-    protected void writeFiles() {
-        systemUtilizationWriter.println(batchSystemUtilization / AppConfiguration.BATCH_SIZE);
-        systemResponseTimeWriter.println(batchSystemResponseTime / AppConfiguration.BATCH_SIZE);
-        systemThroughputWriter.println(batchSystemThroughput / AppConfiguration.BATCH_SIZE);
-
-        cloudletResponseTimeWriter.println(batchCloudletResponseTime / AppConfiguration.BATCH_SIZE);
-        cloudlet1ResponseTimeWriter.println(batchCloudlet1ResponseTime / AppConfiguration.BATCH_SIZE);
-        cloudlet2ResponseTimeWriter.println(batchCloudlet2ResponseTime / AppConfiguration.BATCH_SIZE);
-        cloudResponseTimeWriter.println(batchCloudResponseTime / AppConfiguration.BATCH_SIZE);
-        cloud1ResponseTimeWriter.println(batchCloud1ResponseTime / AppConfiguration.BATCH_SIZE);
-        cloud2ResponseTimeWriter.println(batchCloud2ResponseTime / AppConfiguration.BATCH_SIZE);
-
-        cloudletPopulationWriter.println(batchCloudletPopulation / AppConfiguration.BATCH_SIZE);
-        cloudlet1PopulationWriter.println(batchCloudlet1Population / AppConfiguration.BATCH_SIZE);
-        cloudlet2PopulationWriter.println(batchCloudlet2Population / AppConfiguration.BATCH_SIZE);
-        cloudPopulationWriter.println(batchCloudPopulation / AppConfiguration.BATCH_SIZE);
-        cloud1PopulationWriter.println(batchCloud1Population / AppConfiguration.BATCH_SIZE);
-        cloud2PopulationWriter.println(batchCloud2Population / AppConfiguration.BATCH_SIZE);
-    }
-
-    protected void resetIndexes(){
-        batchSystemUtilization = 0.0;
-        batchSystemResponseTime = 0.0;
-        batchSystemThroughput = 0.0;
-
-        batchCloudletResponseTime = 0;
-        batchCloudlet1ResponseTime = 0;
-        batchCloudlet2ResponseTime = 0;
-        batchCloudResponseTime = 0;
-        batchCloud1ResponseTime = 0;
-        batchCloud2ResponseTime = 0;
-
-        batchCloudletPopulation = 0;
-        batchCloudlet1Population = 0;
-        batchCloudlet2Population = 0;
-        batchCloudPopulation = 0;
-        batchCloud1Population = 0;
-        batchCloud2Population = 0;
+    public void closeWriters() {
+        batchman.printman.closeWriters();
     }
 
     public void printResults(){
@@ -401,6 +240,7 @@ public class Performance {
 
         System.out.println("\n\tpercentage type 2 preempted .... =   " + f.format(percentage2Preemption) +" %");
         System.out.println("\ttotal task 2 preempted ......... =   " + totalClassTwoPreempion);
+        System.out.println("\tmean response time preempted ... =   " + f.format(class2PreemptedResponseTime.getMean()));
 
 
 
