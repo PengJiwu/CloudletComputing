@@ -23,7 +23,7 @@ public class MeanValue {
      *
      * @param elem the element to add for compute the mean
      * @param cur_time the current time event
-     * @param prev_time the previus time event
+     * @param prev_time the previous time event
      * @return
      */
     public MeanValue addElement(double elem, double cur_time, double prev_time) {
