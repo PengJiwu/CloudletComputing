@@ -1,7 +1,7 @@
 package stat;
 
 /**
- * MeanValue implements the Welford's algorithm for compute mean value of a sample
+ * MeanValue implements the Welford's algorithm for compute weighted mean value of a sample
  */
 public class MeanValue {
 
