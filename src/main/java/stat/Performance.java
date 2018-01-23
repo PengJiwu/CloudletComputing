@@ -1,13 +1,11 @@
 package stat;
 
 import cloudlet.Controller;
-import config.AppConfiguration;
 import task.AbstractTask;
 import task.TaskClassOne;
 import task.TaskClassTwo;
 import utils.Clock;
 
-import java.io.*;
 import java.text.DecimalFormat;
 
 
@@ -47,7 +45,7 @@ public class Performance {
 
     protected MeanValue systemResponseTimeMV;
 
-    protected MeanValue class2PreemptedResponseTime;
+    protected MeanValue class2PreemptedResponseTimeMV;
 
 
     public Performance(Controller c) {
@@ -84,7 +82,7 @@ public class Performance {
 
         systemResponseTimeMV = new MeanValue();
 
-        class2PreemptedResponseTime = new MeanValue();
+        class2PreemptedResponseTimeMV = new MeanValue();
     }
 
     public void updateArea() {
@@ -153,16 +151,13 @@ public class Performance {
             double prev_event = controller.getCloudService().getLastCompletionClassTwo();
             cloud2ResponseTimeMV.addElement(currentResponseTime,cur_event,prev_event);
 
-            /*
             TaskClassTwo t2 = (TaskClassTwo) task;
             if (t2.isSwapped()) {
                 // update statistics for preempted task
-                // TODO
-                double preemptedResponseTime = cur_event - task.getArrivalTime();
-                double prev_preemp_event = controller.getCloudService().getLastCompletionClassTwo();
-                class2PreemptedResponseTime.addElement(preemptedResponseTime,cur_event,prev_preemp_event);
+                double prev_preemp_event = controller.getCloudletService().getLastPreemptionTime();
+                class2PreemptedResponseTimeMV.addElement(currentResponseTime,cur_event,prev_preemp_event);
             }
-            */
+
         }
 
         double prev_event = controller.getCloudService().getLastCompletion();
@@ -213,25 +208,25 @@ public class Performance {
         System.out.println("\n\tfor " + index + " jobs");
 
         System.out.println("\n\tsystem utilization ............. =   " + f.format(systemArea.service / clock.getCurrent()));
-        System.out.println("\tsystem mean response time....... =   " + f.format(systemResponseTimeMV.getMean()));
+        System.out.println("\tsystem mean response time....... =   " + f.format(systemResponseTimeMV.getMean())+ " time units");
         System.out.println("\tsystem throughput .............. =   " + f.format(index / clock.getCurrent()));
 
         System.out.println("\n\tcloudlet utilization ........... =   " + f.format(cloudletArea.service / clock.getCurrent()));
         System.out.println("\tcloudlet mean population ....... =   " + f.format(cloudletArea.node / clock.getCurrent()));
         System.out.println("\ttype 1.......................... =   " + f.format(cloudlet1Area.node / clock.getCurrent()));
         System.out.println("\ttype 2.......................... =   " + f.format(cloudlet2Area.node / clock.getCurrent()));
-        System.out.println("\tcloudlet mean response time..... =   " + f.format(cloudletResponseTimeMV.getMean()));
-        System.out.println("\ttype 1.......................... =   " + f.format(cloudlet1ResponseTimeMV.getMean()));
-        System.out.println("\ttype 2.......................... =   " + f.format(cloudlet2ResponseTimeMV.getMean()));
+        System.out.println("\tcloudlet mean response time..... =   " + f.format(cloudletResponseTimeMV.getMean()) + " time units");
+        System.out.println("\ttype 1.......................... =   " + f.format(cloudlet1ResponseTimeMV.getMean())+ " time units");
+        System.out.println("\ttype 2.......................... =   " + f.format(cloudlet2ResponseTimeMV.getMean())+ " time units");
         System.out.println("\tcloudlet throughput ............ =   " + f.format(cloudletIndex /clock.getCurrent()));
 
         System.out.println("\n\tcloud utilization .............. =   " + f.format(cloudArea.service / clock.getCurrent()));
         System.out.println("\tcloud mean population .......... =   " + f.format(cloudArea.node / clock.getCurrent()));
         System.out.println("\ttype 1.......................... =   " + f.format(cloud1Area.node / clock.getCurrent()));
         System.out.println("\ttype 2.......................... =   " + f.format(cloud2Area.node / clock.getCurrent()));
-        System.out.println("\tcloud mean response time........ =   " + f.format(cloudResponseTimeMV.getMean()));
-        System.out.println("\ttype 1.......................... =   " + f.format(cloud1ResponseTimeMV.getMean()));
-        System.out.println("\ttype 2.......................... =   " + f.format(cloud2ResponseTimeMV.getMean()));
+        System.out.println("\tcloud mean response time........ =   " + f.format(cloudResponseTimeMV.getMean())+ " time units");
+        System.out.println("\ttype 1.......................... =   " + f.format(cloud1ResponseTimeMV.getMean())+ " time units");
+        System.out.println("\ttype 2.......................... =   " + f.format(cloud2ResponseTimeMV.getMean())+ " time units");
         System.out.println("\tcloud throughput ............... =   " + f.format(cloudIndex / clock.getCurrent()));
 
         System.out.println("\n\teffective cloudlet throughput .. =   " + f.format(cloudletIndex /clock.getCurrent()));
@@ -240,7 +235,7 @@ public class Performance {
 
         System.out.println("\n\tpercentage type 2 preempted .... =   " + f.format(percentage2Preemption) +" %");
         System.out.println("\ttotal task 2 preempted ......... =   " + totalClassTwoPreempion);
-        System.out.println("\tmean response time preempted ... =   " + f.format(class2PreemptedResponseTime.getMean()));
+        System.out.println("\tmean response time preempted ... =   " + f.format(class2PreemptedResponseTimeMV.getMean())+ " time units");
 
 
 
