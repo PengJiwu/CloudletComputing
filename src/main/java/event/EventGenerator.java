@@ -10,12 +10,14 @@ import utils.Distributions;
 public class EventGenerator {
 
     private Distributions distributions;
+    private double lambaTot;
 
     public EventGenerator(){
+        lambaTot = AppConfiguration.ARRIVAL_RATE_1 + AppConfiguration.ARRIVAL_RATE_2;
         distributions = Distributions.getInstance();
     }
 
-
+    /*
     public ArrivalEvent generateArrival(){
 
         distributions.selectStream(1);
@@ -35,9 +37,33 @@ public class EventGenerator {
         //System.out.println("Task arrival: " + task.toString());
         return new ArrivalEvent(task);
     }
+*/
+    public ArrivalEvent generateArrival(){
+
+        AbstractTask task;
+        double arrival = Clock.getInstance().getArrival();
+        arrival += distributions.exponential(lambaTot,2);
 
 
-/*    public static void main(String[] args) {
+        double p1 = AppConfiguration.ARRIVAL_RATE_1 / lambaTot;
+
+        distributions.selectStream(1);
+        double typeProb = distributions.uniform(0.0,1.0);
+
+        if(typeProb <= p1){
+            task = new TaskClassOne(arrival);
+        }
+        else{
+            task = new TaskClassTwo(arrival);
+        }
+
+        Clock.getInstance().setArrival(arrival);
+        //System.out.println("Task arrival: " + task.toString());
+        return new ArrivalEvent(task);
+    }
+
+/*
+    public static void main(String[] args) {
         AppConfiguration.readConfiguration();
         EventGenerator eg = new EventGenerator();
         ArrivalEvent test = eg.generateArrival();
@@ -56,5 +82,6 @@ public class EventGenerator {
         System.out.println(test5.toString());
         System.out.println(test6.toString());
         System.out.println(test7.toString());
-    }*/
+    }
+    */
 }
