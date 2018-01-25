@@ -18,15 +18,11 @@ public class Controller {
         this.cloudService = new Cloud();
     }
 
-
     /**
      * Dispatching algorithm from text
      */
     public void handleArrival(AbstractTask task){
         //class 1 arrival
-        //System.out.println("A CloudletVariables: N1 = " + cloudletService.getN1() + " N2 = " + cloudletService.getN2());
-        //System.out.println("A CloudVariables: N1 = " + cloudService.getN1() + " N2 = " + cloudService.getN2());
-
         if (task instanceof TaskClassOne){
             if (cloudletService.getN1() == AppConfiguration.N) {
                 cloudService.assignServer(task);
@@ -49,10 +45,6 @@ public class Controller {
             else
                 cloudletService.assignServer(task);
         }
-
-        //System.out.println("A CloudletVariables post assign: N1 = " + cloudletService.getN1() + " N2 = " + cloudletService.getN2());
-        //System.out.println("A CloudVariables post assign: N1 = " + cloudService.getN1() + " N2 = " + cloudService.getN2());
-        //System.out.println("");
     }
 
 
@@ -63,15 +55,7 @@ public class Controller {
         return cloudService;
     }
 
-    public void setCloudService(Cloud cloudService) {
-        this.cloudService = cloudService;
-    }
-
     public Cloudlet getCloudletService() {
         return cloudletService;
-    }
-
-    public void setCloudletService(Cloudlet cloudletService) {
-        this.cloudletService = cloudletService;
     }
 }

@@ -9,7 +9,6 @@ import task.TaskClassOne;
 import task.TaskClassTwo;
 import utils.Distributions;
 
-import javax.sql.rowset.serial.SerialRef;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,8 +69,6 @@ public class Cloud {
         task.setCloudlet(false);
         AbstractEvent toPush = new CompletionEvent(task);
         eventQueue.addEvent(toPush);
-
-        //System.out.println("TaskListCloud size = " + taskList.size());
     }
 
     private void incrementPopulation(AbstractTask task){
@@ -84,9 +81,6 @@ public class Cloud {
     }
 
     public void handleCompletion(AbstractTask task) {
-
-        //System.out.println("C CloudVariables: N1 = " + this.getN1() + " N2 = " + this.getN2());
-
         taskList.remove(task);
         if (task instanceof TaskClassOne){
             this.classOneCompletion++;
@@ -98,11 +92,6 @@ public class Cloud {
             this.n2--;
             this.lastCompletionClassTwo = task.getCompletionTime();
         }
-
-       //System.out.println("C CloudletVariables post completion: N1 = " + this.getN1() + " N2 = " + this.getN2());
-       //System.out.println("Task removed: " + task.toString());
-       //System.out.println("TaskListCloud size = " + taskList.size());
-       //System.out.println("");
     }
 
     public double getLastCompletion(){
@@ -116,55 +105,24 @@ public class Cloud {
         return classOneCompletion;
     }
 
-    public void setClassOneCompletion(Integer classOneCompletion) {
-        this.classOneCompletion = classOneCompletion;
-    }
-
     public Integer getClassTwoCompletion() {
         return classTwoCompletion;
-    }
-
-    public void setClassTwoCompletion(Integer classTwoCompletion) {
-        this.classTwoCompletion = classTwoCompletion;
     }
 
     public Integer getN1() {
         return n1;
     }
 
-    public void setN1(Integer n1) {
-        this.n1 = n1;
-    }
-
     public Integer getN2() {
         return n2;
-    }
-
-    public void setN2(Integer n2) {
-        this.n2 = n2;
-    }
-
-    public List<AbstractTask> getTaskList() {
-        return taskList;
-    }
-
-    public void setTaskList(List<AbstractTask> taskList) {
-        this.taskList = taskList;
     }
 
     public double getLastCompletionClassOne() {
         return lastCompletionClassOne;
     }
 
-    public void setLastCompletionClassOne(double lastCompletionClassOne) {
-        this.lastCompletionClassOne = lastCompletionClassOne;
-    }
-
     public double getLastCompletionClassTwo() {
         return lastCompletionClassTwo;
     }
 
-    public void setLastCompletionClassTwo(double lastCompletionClassTwo) {
-        this.lastCompletionClassTwo = lastCompletionClassTwo;
-    }
 }

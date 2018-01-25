@@ -41,13 +41,8 @@ public abstract class AbstractTask {
         this.serviceTime = serviceTime;
     }
 
-
     public double getArrivalTime() {
         return arrivalTime;
-    }
-
-    public void setArrivalTime(double arrivalTime) {
-        this.arrivalTime = arrivalTime;
     }
 
     public Boolean isCloudlet() {
@@ -56,15 +51,6 @@ public abstract class AbstractTask {
 
     public void setCloudlet(Boolean cloudlet) {
         this.cloudlet = cloudlet;
-    }
-
-    @Override
-    public String toString() {
-        return "AbstractTask{" +
-                "arrivalTime=" + arrivalTime +
-                ", serviceTime=" + serviceTime +
-                ", cloudlet=" + cloudlet +
-                '}';
     }
 
     @Override
@@ -79,7 +65,6 @@ public abstract class AbstractTask {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(arrivalTime, serviceTime, cloudlet);
     }
 }

@@ -7,9 +7,6 @@ public class Clock {
     /* Last arrival time */
     private double arrival;
 
-    /* Next Completion */
-    //private double completion;
-
     /* Current time */
     private double current;
 
@@ -17,8 +14,6 @@ public class Clock {
     private double next;
 
     private Clock() {
-        //this.arrival = 0.0;
-        //this.completion = 0.0;
         this.current = 0.0;
         this.next = 0.0;
     }
@@ -32,13 +27,6 @@ public class Clock {
         return instance;
     }
 
-    /**
-     * Update Current Clock time with min between last arrival and next completion
-     */
-    //public void updateCurrent(){
-    //    this.current = next;
-    //    this.next = Double.min(this.arrival,this.completion);
-    //}
 
     /**
      * Getter and Setter
@@ -46,17 +34,10 @@ public class Clock {
     public double getArrival() {
         return arrival;
     }
+
     public void setArrival(double arrival) {
         this.arrival = arrival;
     }
-
-   //public double getCompletion() {
-   //    return completion;
-   //}
-
-   //public void setCompletion(double completion) {
-   //    this.completion = completion;
-   //}
 
     public double getCurrent() {
         return current;
@@ -72,5 +53,9 @@ public class Clock {
 
     public void setNext(double next) {
         this.next = next;
+    }
+
+    public static void restart() {
+        instance = null;
     }
 }

@@ -17,71 +17,23 @@ public class EventGenerator {
         distributions = Distributions.getInstance();
     }
 
-    /*
-    public ArrivalEvent generateArrival(){
-
-        distributions.selectStream(1);
-        double type = distributions.uniform(1.0,2.0);
-        double arrival = Clock.getInstance().getArrival();
-        AbstractTask task;
-        if(type <= 1.5){
-            arrival += distributions.exponential(AppConfiguration.ARRIVAL_RATE_1,2);
-            task = new TaskClassOne(arrival);
-        }
-        else{
-            arrival += distributions.exponential(AppConfiguration.ARRIVAL_RATE_2,3);
-            task = new TaskClassTwo(arrival);
-        }
-
-        Clock.getInstance().setArrival(arrival);
-        //System.out.println("Task arrival: " + task.toString());
-        return new ArrivalEvent(task);
-    }
-*/
     public ArrivalEvent generateArrival(){
 
         AbstractTask task;
         double arrival = Clock.getInstance().getArrival();
         arrival += distributions.exponential(lambaTot,2);
-
-
         double p1 = AppConfiguration.ARRIVAL_RATE_1 / lambaTot;
-
         distributions.selectStream(1);
         double typeProb = distributions.uniform(0.0,1.0);
-
         if(typeProb <= p1){
             task = new TaskClassOne(arrival);
         }
         else{
             task = new TaskClassTwo(arrival);
         }
-
         Clock.getInstance().setArrival(arrival);
-        //System.out.println("Task arrival: " + task.toString());
         return new ArrivalEvent(task);
     }
 
-/*
-    public static void main(String[] args) {
-        AppConfiguration.readConfiguration();
-        EventGenerator eg = new EventGenerator();
-        ArrivalEvent test = eg.generateArrival();
-        ArrivalEvent test1 = eg.generateArrival();
-        ArrivalEvent test2 = eg.generateArrival();
-        ArrivalEvent test3 = eg.generateArrival();
-        ArrivalEvent test4 = eg.generateArrival();
-        ArrivalEvent test5 = eg.generateArrival();
-        ArrivalEvent test6 = eg.generateArrival();
-        ArrivalEvent test7 = eg.generateArrival();
-        System.out.println(test.toString());
-        System.out.println(test1.toString());
-        System.out.println(test2.toString());
-        System.out.println(test3.toString());
-        System.out.println(test4.toString());
-        System.out.println(test5.toString());
-        System.out.println(test6.toString());
-        System.out.println(test7.toString());
-    }
-    */
+
 }

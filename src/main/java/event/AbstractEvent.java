@@ -14,7 +14,6 @@ public abstract class AbstractEvent implements Comparable<AbstractEvent>{
         this.task = task;
     }
 
-
     @Override
     public int compareTo(AbstractEvent o) {
         if (this.eventTime < o.eventTime)
@@ -32,24 +31,12 @@ public abstract class AbstractEvent implements Comparable<AbstractEvent>{
         return eventTime;
     }
 
-    public void setEventTime(double eventTime) {
-        this.eventTime = eventTime;
-    }
-
     public AbstractTask getTask() {
         return task;
     }
 
     public void setTask(AbstractTask task) {
         this.task = task;
-    }
-
-    @Override
-    public String toString() {
-        return "AbstractEvent{" +
-                "eventTime=" + eventTime +
-                ", task=" + task.toString() +
-                '}';
     }
 
     @Override
@@ -62,7 +49,6 @@ public abstract class AbstractEvent implements Comparable<AbstractEvent>{
 
     @Override
     public int hashCode() {
-
         return Objects.hash(eventTime, task);
     }
 }

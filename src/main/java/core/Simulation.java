@@ -7,7 +7,6 @@ import event.ArrivalEvent;
 import event.EventGenerator;
 import event.EventQueue;
 import stat.Performance;
-import task.TaskClassOne;
 import utils.Clock;
 
 public class Simulation {
@@ -20,10 +19,31 @@ public class Simulation {
 
     public static void main(String[] args) {
         AppConfiguration.readConfiguration();
+        if (AppConfiguration.TEST_S){
+            multipleTest();
+        }
+        else{
+            singleTest();
+        }
+        System.exit(0);
+    }
+
+    public static void multipleTest(){
+        for (;AppConfiguration.S > 0 ; AppConfiguration.S --){
+            System.out.println("Starting simulation for S = " + AppConfiguration.S);
+            setupEnvironment();
+            run();
+            cleanEnvironment();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+        }
+    }
+
+    public static void singleTest() {
         setupEnvironment();
         run();
         cleanEnvironment();
-        System.exit(0);
     }
 
     private static void setupEnvironment() {
@@ -36,29 +56,22 @@ public class Simulation {
 
     private static void cleanEnvironment(){
         performance.closeWriters();
+        Clock.restart();
+        EventQueue.fill();
+        setupEnvironment();
     }
 
     private static void run(){
 
         while (clock.getArrival() == AppConfiguration.START || eventQueue.getQueueSize() > 0){
-            if (clock.getArrival() < AppConfiguration.STOP /*&& i<10*/){
+            if (clock.getArrival() < AppConfiguration.STOP){
                 AbstractEvent event = eventGenerator.generateArrival();
                 eventQueue.addEvent(event);
-
             }
-            //System.out.println(eventQueue.toString());
-
             AbstractEvent toHandle = eventQueue.getFirstAvailableEvent();
-            //System.out.println("Task to handle: " + toHandle.toString());
-
-
             clock.setNext(toHandle.getEventTime());
-
             performance.updateArea();
-
             clock.setCurrent(clock.getNext());
-
-
             if (toHandle instanceof ArrivalEvent){
                 controller.handleArrival(toHandle.getTask());
             }
@@ -72,9 +85,7 @@ public class Simulation {
                     controller.getCloudService().handleCompletion(toHandle.getTask());
                 }
             }
-
         }
-
         performance.printResults();
     }
 }

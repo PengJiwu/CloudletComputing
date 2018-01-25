@@ -78,9 +78,6 @@ public class Cloudlet {
         taskList.add(task);
         AbstractEvent toPush = new CompletionEvent(task);
         eventQueue.addEvent(toPush);
-
-        //System.out.println("TaskListCloudlet size = " + taskList.size());
-
     }
 
     public AbstractTask stopTask(double swappedTime) {
@@ -122,8 +119,44 @@ public class Cloudlet {
         return toStop;
     }
 
+    public void handleCompletion(AbstractTask task) {
+        taskList.remove(task);
+        if (task instanceof TaskClassOne){
+            this.n1--;
+            this.classOneCompletion++;
+            this.lastCompletionClassOne = task.getCompletionTime();
+        }
+        else{
+            this.n2--;
+            this.classTwoCompletion++;
+            this.lastCompletionClassTwo = task.getCompletionTime();
+        }
+    }
+
+    private void incrementPopulation(AbstractTask task){
+        if (task instanceof TaskClassOne) {
+            this.n1++;
+        }
+        else {
+            this.n2++;
+            this.totalClassTwoAssigned++;
+        }
+    }
+
+    public double getLastCompletion(){
+        return Double.max(this.lastCompletionClassOne,this.lastCompletionClassTwo);
+    }
+
     private void updatePercentage2Preemption() {
         this.percentage2Preemption = (double) this.totalClassTwoPreemption / (double) this.totalClassTwoAssigned;
+    }
+
+
+    /**
+     * Getter and Setter
+     */
+    public Integer getN1() {
+        return n1;
     }
 
     public double getPercentage2Preemption() {
@@ -138,94 +171,24 @@ public class Cloudlet {
         return totalClassTwoAssigned;
     }
 
-    private void incrementPopulation(AbstractTask task){
-        if (task instanceof TaskClassOne) {
-            this.n1++;
-        }
-        else {
-            this.n2++;
-            this.totalClassTwoAssigned++;
-        }
-    }
-
-    public void handleCompletion(AbstractTask task) {
-
-        //System.out.println("C CloudletVariables: N1 = " + this.getN1() + " N2 = " + this.getN2());
-
-        taskList.remove(task);
-        if (task instanceof TaskClassOne){
-            this.n1--;
-            this.classOneCompletion++;
-            this.lastCompletionClassOne = task.getCompletionTime();
-        }
-        else{
-            this.n2--;
-            this.classTwoCompletion++;
-            this.lastCompletionClassTwo = task.getCompletionTime();
-        }
-
-        //System.out.println("C CloudletVariables post completion: N1 = " + this.getN1() + " N2 = " + this.getN2());
-        //System.out.println("Task removed: " + task.toString());
-
-        //System.out.println("TaskListCloud size = " + taskList.size());
-        //System.out.println("TaskList: " + taskList.toString());
-        //System.out.println("");
-    }
-
-    public double getLastCompletion(){
-        return Double.max(this.lastCompletionClassOne,this.lastCompletionClassTwo);
-    }
-
-
-    /**
-     * Getter and Setter
-     */
-    public Integer getN1() {
-        return n1;
-    }
-
-    public void setN1(Integer n1) {
-        this.n1 = n1;
-    }
-
     public Integer getN2() {
         return n2;
-    }
-
-    public void setN2(Integer n2) {
-        this.n2 = n2;
     }
 
     public Integer getClassOneCompletion() {
         return classOneCompletion;
     }
 
-    public void setClassOneCompletion(Integer classOneCompletion) {
-        this.classOneCompletion = classOneCompletion;
-    }
-
     public Integer getClassTwoCompletion() {
         return classTwoCompletion;
-    }
-
-    public void setClassTwoCompletion(Integer classTwoCompletion) {
-        this.classTwoCompletion = classTwoCompletion;
     }
 
     public double getLastCompletionClassOne() {
         return lastCompletionClassOne;
     }
 
-    public void setLastCompletionClassOne(double lastCompletionClassOne) {
-        this.lastCompletionClassOne = lastCompletionClassOne;
-    }
-
     public double getLastCompletionClassTwo() {
         return lastCompletionClassTwo;
-    }
-
-    public void setLastCompletionClassTwo(double lastCompletionClassTwo) {
-        this.lastCompletionClassTwo = lastCompletionClassTwo;
     }
 
     public double getLastPreemptionTime() {

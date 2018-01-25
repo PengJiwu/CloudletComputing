@@ -7,9 +7,6 @@ public class TaskClassOne extends AbstractTask {
         super(arrivalTime,0.0);
     }
 
-    public TaskClassOne(double arrivalTime, double serviceTime){
-        super(arrivalTime,serviceTime);
-    }
     /**
      * Compute Completion Time
      */
@@ -17,11 +14,4 @@ public class TaskClassOne extends AbstractTask {
         return this.getArrivalTime() + this.getServiceTime();
     }
 
-    @Override
-    public String toString() {
-        return "TaskClassOne{" +
-                "arrivalTime=" + arrivalTime +
-                ", serviceTime=" + serviceTime +
-                '}';
-    }
 }

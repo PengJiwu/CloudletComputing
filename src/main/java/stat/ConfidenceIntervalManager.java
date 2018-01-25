@@ -261,8 +261,6 @@ public class ConfidenceIntervalManager {
                 +f.format(getLowerEndPoint(batch2PreemptedResponseTimeSMV))+_space
                 +f.format(getUpperEndPoint(batch2PreemptedResponseTimeSMV))
         );
-
-
     }
 
     protected double getLowerEndPoint(SimpleMeanValue mv) {

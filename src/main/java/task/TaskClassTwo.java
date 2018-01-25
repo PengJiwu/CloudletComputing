@@ -11,11 +11,6 @@ public class TaskClassTwo extends AbstractTask {
     /* Task swapped*/
     private double setupTime;
 
-    public TaskClassTwo() {
-        this.swapTime = 0.0;
-        this.swapped = false;
-    }
-
     public TaskClassTwo(double arrivalTime, double serviceTime, double swapTime, double setupTime, Boolean swapped) {
         super(arrivalTime, serviceTime);
         this.swapTime = swapTime;
@@ -63,13 +58,4 @@ public class TaskClassTwo extends AbstractTask {
         this.setupTime = setupTime;
     }
 
-    @Override
-    public String toString() {
-        return "TaskClassTwo{" +
-                "arrivalTime=" + arrivalTime +
-                ", serviceTime=" + serviceTime +
-                ", swapTime=" + swapTime +
-                ", swapped=" + swapped +
-                '}';
-    }
 }
