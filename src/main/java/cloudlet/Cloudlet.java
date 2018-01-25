@@ -44,10 +44,10 @@ public class Cloudlet {
     /* Percentage of Task Class Two */
     private double percentage2Preemption;
 
-    /* Total number of Task Class Two preemted*/
-    private int totalClassTwoPreempion;
+    /* Total number of Task Class Two preempted*/
+    private int totalClassTwoPreemption;
 
-    /* Total number of Task Class Two assigned to Cloudlete*/
+    /* Total number of Task Class Two assigned to Cloudlet*/
     private int totalClassTwoAssigned;
 
     private double lastPreemptionTime;
@@ -95,7 +95,7 @@ public class Cloudlet {
             toStop.setSwapped(true);
             this.n2--;
 
-            this.totalClassTwoPreempion++;
+            this.totalClassTwoPreemption++;
             updatePercentage2Preemption();
 
             toStop.setSwapTime(swappedTime);
@@ -123,15 +123,15 @@ public class Cloudlet {
     }
 
     private void updatePercentage2Preemption() {
-        this.percentage2Preemption = (double) this.totalClassTwoPreempion / (double) this.totalClassTwoAssigned;
+        this.percentage2Preemption = (double) this.totalClassTwoPreemption / (double) this.totalClassTwoAssigned;
     }
 
     public double getPercentage2Preemption() {
         return percentage2Preemption;
     }
 
-    public Integer getTotalClassTwoPreempion() {
-        return totalClassTwoPreempion;
+    public Integer getTotalClassTwoPreemption() {
+        return totalClassTwoPreemption;
     }
 
     public Integer getTotalClassTwoAssigned() {

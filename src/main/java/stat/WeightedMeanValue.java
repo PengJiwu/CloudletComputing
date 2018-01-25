@@ -1,13 +1,13 @@
 package stat;
 
 /**
- * MeanValue implements the Welford's algorithm for compute weighted mean value of a sample
+ * WeightedMeanValue implements the Welford's algorithm for compute weighted mean value of a sample
  */
-public class MeanValue {
+public class WeightedMeanValue {
 
     private double current_value;
 
-    public MeanValue() {
+    public WeightedMeanValue() {
         current_value = 0.0;
     }
 
@@ -26,7 +26,7 @@ public class MeanValue {
      * @param prev_time the previous time event
      * @return
      */
-    public MeanValue addElement(double elem, double cur_time, double prev_time) {
+    public WeightedMeanValue addElement(double elem, double cur_time, double prev_time) {
         double delta = cur_time - prev_time;
         if (delta > 0) {
             current_value += (delta/cur_time)*(elem-current_value);
