@@ -1,6 +1,7 @@
 package stat;
 
 import cloudlet.Controller;
+import config.AppConfiguration;
 import task.AbstractTask;
 import task.TaskClassOne;
 import task.TaskClassTwo;
@@ -49,6 +50,14 @@ public class Performance {
     protected WeightedMeanValue system2ResponseTimeMV;
 
     protected WeightedMeanValue class2PreemptedResponseTimeMV;
+
+    private static double minResponseTime = Double.MAX_VALUE;
+    private static int sGlobal = 0;
+    private static double cloudletMinResponseTime = Double.MAX_VALUE;
+    private static int sCloudlet = 0;
+    private static double cloudMinResponseTime = Double.MAX_VALUE;
+    private static int sCloud = 0;
+
 
 
     public Performance(Controller c) {
@@ -266,6 +275,23 @@ public class Performance {
         System.out.println("\n\tpercentage type 2 preempted ............. =   " + f.format(percentage2Preemption) +" %");
         System.out.println("\ttotal task 2 preempted .................. =   " + totalClassTwoPreemption);
         System.out.println("\tmean response time preempted ............ =   " + f.format(class2PreemptedResponseTimeMV.getMean())+ " s");
+
+        if (AppConfiguration.TEST_S){
+            if (systemResponseTimeMV.getMean() < minResponseTime){
+                minResponseTime = systemResponseTimeMV.getMean();
+                sGlobal = AppConfiguration.S;
+            }
+            if (cloudletResponseTimeMV.getMean() < cloudletMinResponseTime){
+                cloudletMinResponseTime = cloudletResponseTimeMV.getMean();
+                sCloudlet = AppConfiguration.S;
+            }if (cloudResponseTimeMV.getMean() < cloudMinResponseTime){
+                cloudMinResponseTime = cloudResponseTimeMV.getMean();
+                sCloud = AppConfiguration.S;
+            }
+            System.out.println("System min response time: " + minResponseTime + " s for S = " + sGlobal);
+            System.out.println("Cloudlet min response time: " + cloudletMinResponseTime + " s for S = " + sCloudlet);
+            System.out.println("Cloud min response time: " + cloudMinResponseTime + " s for S = " + sCloud);
+        }
 
 
         ciman.setTotalCompletedJobs(index);
