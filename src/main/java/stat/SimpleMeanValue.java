@@ -8,7 +8,8 @@ public class SimpleMeanValue {
 
     public SimpleMeanValue() {
         current_mean = 0.0;
-        current_index = 0;
+        current_var = 0.0;
+        current_index = 0.0;
     }
 
     /**
@@ -23,7 +24,9 @@ public class SimpleMeanValue {
      *
      * @return the variance at current state
      */
-    public double getVariance() {return current_var;}
+    public double getVariance() {
+        return current_var / current_index;
+    }
     /**
      *
      * @param elem

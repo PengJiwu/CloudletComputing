@@ -50,7 +50,6 @@ public class Cloudlet {
     /* Total number of Task Class Two assigned to Cloudlet*/
     private int totalClassTwoAssigned;
 
-    private double lastPreemptionTime;
 
 
     public Cloudlet() {
@@ -64,7 +63,7 @@ public class Cloudlet {
         this.lastCompletionClassOne = 0.0;
         this.lastCompletionClassTwo = 0.0;
         this.percentage2Preemption = 0.0;
-        this.lastPreemptionTime = 0.0;
+
     }
 
     public void assignServer(AbstractTask task){
@@ -97,8 +96,6 @@ public class Cloudlet {
 
             toStop.setSwapTime(swappedTime);
 
-            // take track of the preemption instant time
-            this.lastPreemptionTime = swappedTime;
         }
 
         return toStop;
@@ -183,15 +180,4 @@ public class Cloudlet {
         return classTwoCompletion;
     }
 
-    public double getLastCompletionClassOne() {
-        return lastCompletionClassOne;
-    }
-
-    public double getLastCompletionClassTwo() {
-        return lastCompletionClassTwo;
-    }
-
-    public double getLastPreemptionTime() {
-        return lastPreemptionTime;
-    }
 }

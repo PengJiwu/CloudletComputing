@@ -97,9 +97,9 @@ public class BatchManager {
 
         batchSystemUtilization += per.systemArea.service / current_time;
 
-        batchSystemResponseTime += per.systemResponseTimeMV.getMean();
-        batch1SystemResponseTime += per.system1ResponseTimeMV.getMean();
-        batch2SystemResponseTime += per.system2ResponseTimeMV.getMean();
+        batchSystemResponseTime += per.systemResponseTimeSMV.getMean();
+        batch1SystemResponseTime += per.system1ResponseTimeSMV.getMean();
+        batch2SystemResponseTime += per.system2ResponseTimeSMV.getMean();
 
         batchSystemThroughput += index / per.clock.getCurrent();
 
@@ -117,12 +117,12 @@ public class BatchManager {
 
 
 
-        batchCloudletResponseTime += per.cloudletResponseTimeMV.getMean();
-        batchCloudlet1ResponseTime += per.cloudlet1ResponseTimeMV.getMean();
-        batchCloudlet2ResponseTime += per.cloudlet2ResponseTimeMV.getMean();
-        batchCloudResponseTime += per.cloudResponseTimeMV.getMean();
-        batchCloud1ResponseTime += per.cloud1ResponseTimeMV.getMean();
-        batchCloud2ResponseTime += per.cloud2ResponseTimeMV.getMean();
+        batchCloudletResponseTime += per.cloudletResponseTimeSMV.getMean();
+        batchCloudlet1ResponseTime += per.cloudlet1ResponseTimeSMV.getMean();
+        batchCloudlet2ResponseTime += per.cloudlet2ResponseTimeSMV.getMean();
+        batchCloudResponseTime += per.cloudResponseTimeSMV.getMean();
+        batchCloud1ResponseTime += per.cloud1ResponseTimeSMV.getMean();
+        batchCloud2ResponseTime += per.cloud2ResponseTimeSMV.getMean();
 
         batchCloudletPopulation += per.cloudletArea.node / current_time;
         batchCloudlet1Population += per.cloudlet1Area.node / current_time;
@@ -136,7 +136,7 @@ public class BatchManager {
         batch1EffectiveCloudletThroughput += cloudletClassOneCompletion / current_time;
         batch2EffectiveCloudletThroughput += cloudletClassTwoCompletion / current_time;
 
-        batch2PreemptedResponseTime += per.class2PreemptedResponseTimeMV.getMean();
+        batch2PreemptedResponseTime += per.class2PreemptedResponseTimeSMV.getMean();
         batch2TotalPreemptedTask += per.controller.getCloudletService().getTotalClassTwoPreemption();
         batch2TotalClassTwoAssigned += per.controller.getCloudletService().getTotalClassTwoAssigned();
 

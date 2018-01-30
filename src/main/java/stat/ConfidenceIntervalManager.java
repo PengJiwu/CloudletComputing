@@ -1,6 +1,7 @@
 package stat;
 
 import library.Rvms;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.text.DecimalFormat;
 
@@ -50,7 +51,7 @@ public class ConfidenceIntervalManager {
 
 
 
-    public ConfidenceIntervalManager(BatchManager b) {
+    public ConfidenceIntervalManager(BatchManager b, Performance p) {
         this.rvms = new Rvms();
 
         this.bman = b;
@@ -280,6 +281,19 @@ public class ConfidenceIntervalManager {
     public void setTotalCompletedJobs(int totalCompletedJobs) {
         this.totalJobs = totalCompletedJobs;
         this.k = totalCompletedJobs / bsize;
+    }
+
+    protected String isInRange(double original, SimpleMeanValue mv) {
+        DecimalFormat f = new DecimalFormat("###0.0000");
+
+        double lowerEP = getLowerEndPoint(mv);
+        double upperEP = getUpperEndPoint(mv);
+
+        boolean result = mv.getMean()+lowerEP <= original && original <= mv.getMean()+upperEP;
+
+        return "["+result+"] \tvalue "+f.format(original)+" \tin range ["
+                    + f.format(mv.getMean()+lowerEP) +" - "
+                    + f.format(mv.getMean()+upperEP)+"]";
     }
 }
 

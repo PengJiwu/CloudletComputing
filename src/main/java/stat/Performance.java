@@ -37,19 +37,19 @@ public class Performance {
     /**
      * Mean value variables
      */
-    protected WeightedMeanValue cloudletResponseTimeMV;
-    protected WeightedMeanValue cloudlet1ResponseTimeMV;
-    protected WeightedMeanValue cloudlet2ResponseTimeMV;
+    protected SimpleMeanValue cloudletResponseTimeSMV;
+    protected SimpleMeanValue cloudlet1ResponseTimeSMV;
+    protected SimpleMeanValue cloudlet2ResponseTimeSMV;
 
-    protected WeightedMeanValue cloudResponseTimeMV;
-    protected WeightedMeanValue cloud1ResponseTimeMV;
-    protected WeightedMeanValue cloud2ResponseTimeMV;
+    protected SimpleMeanValue cloudResponseTimeSMV;
+    protected SimpleMeanValue cloud1ResponseTimeSMV;
+    protected SimpleMeanValue cloud2ResponseTimeSMV;
 
-    protected WeightedMeanValue systemResponseTimeMV;
-    protected WeightedMeanValue system1ResponseTimeMV;
-    protected WeightedMeanValue system2ResponseTimeMV;
+    protected SimpleMeanValue systemResponseTimeSMV;
+    protected SimpleMeanValue system1ResponseTimeSMV;
+    protected SimpleMeanValue system2ResponseTimeSMV;
 
-    protected WeightedMeanValue class2PreemptedResponseTimeMV;
+    protected SimpleMeanValue class2PreemptedResponseTimeSMV;
 
     private static double minResponseTime = Double.MAX_VALUE;
     private static int sGlobal = 0;
@@ -80,25 +80,25 @@ public class Performance {
 
         initMeanValues();
         batchman = new BatchManager(this);
-        ciman = new ConfidenceIntervalManager(batchman);
+        ciman = new ConfidenceIntervalManager(batchman,this);
 
     }
 
     private void initMeanValues() {
-        cloudlet1ResponseTimeMV = new WeightedMeanValue();
-        cloudlet2ResponseTimeMV = new WeightedMeanValue();
-        cloudletResponseTimeMV = new WeightedMeanValue();
+        cloudlet1ResponseTimeSMV = new SimpleMeanValue();
+        cloudlet2ResponseTimeSMV = new SimpleMeanValue();
+        cloudletResponseTimeSMV = new SimpleMeanValue();
 
-        cloud1ResponseTimeMV = new WeightedMeanValue();
-        cloud2ResponseTimeMV = new WeightedMeanValue();
-        cloudResponseTimeMV = new WeightedMeanValue();
+        cloud1ResponseTimeSMV = new SimpleMeanValue();
+        cloud2ResponseTimeSMV = new SimpleMeanValue();
+        cloudResponseTimeSMV = new SimpleMeanValue();
 
-        systemResponseTimeMV = new WeightedMeanValue();
+        systemResponseTimeSMV = new SimpleMeanValue();
 
-        system1ResponseTimeMV = new WeightedMeanValue();
-        system2ResponseTimeMV = new WeightedMeanValue();
+        system1ResponseTimeSMV = new SimpleMeanValue();
+        system2ResponseTimeSMV = new SimpleMeanValue();
 
-        class2PreemptedResponseTimeMV = new WeightedMeanValue();
+        class2PreemptedResponseTimeSMV = new SimpleMeanValue();
     }
 
     public void updateArea() {
@@ -141,66 +141,57 @@ public class Performance {
 
     public void handleCloudletCompletion(AbstractTask task) {
         double currentResponseTime = task.getCompletionTime()-task.getArrivalTime();
-        double cur_event = clock.getCurrent();
+
         boolean classOne = (task instanceof TaskClassOne);
 
         if (classOne){
-            double prev_event = controller.getCloudletService().getLastCompletionClassOne();
-            cloudlet1ResponseTimeMV.addElement(currentResponseTime,cur_event,prev_event);
+            cloudlet1ResponseTimeSMV.addElement(currentResponseTime);
         }
         else{
-            double prev_event = controller.getCloudletService().getLastCompletionClassTwo();
-            cloudlet2ResponseTimeMV.addElement(currentResponseTime,cur_event,prev_event);
+            cloudlet2ResponseTimeSMV.addElement(currentResponseTime);
         }
 
-        double prev_event = controller.getCloudletService().getLastCompletion();
-        cloudletResponseTimeMV.addElement(currentResponseTime,cur_event,prev_event);
-        handleCompletion(cur_event,prev_event,currentResponseTime,task);
+        cloudletResponseTimeSMV.addElement(currentResponseTime);
+        handleCompletion(currentResponseTime,task);
 
     }
 
     public void handleCloudCompletion(AbstractTask task) {
         double currentResponseTime = task.getCompletionTime()-task.getArrivalTime();
         boolean classOne = (task instanceof TaskClassOne);
-        double cur_event = clock.getCurrent();
+
 
         if (classOne){
             // class One completion on cloud
-            double prev_event = controller.getCloudService().getLastCompletionClassOne();
-            cloud1ResponseTimeMV.addElement(currentResponseTime,cur_event,prev_event);
+            cloud1ResponseTimeSMV.addElement(currentResponseTime);
         }
         else{
             // class Two completion on cloud
-            double prev_event = controller.getCloudService().getLastCompletionClassTwo();
-            cloud2ResponseTimeMV.addElement(currentResponseTime,cur_event,prev_event);
+            cloud2ResponseTimeSMV.addElement(currentResponseTime);
 
             TaskClassTwo t2 = (TaskClassTwo) task;
             if (t2.isSwapped()) {
                 // update statistics for preempted task
-                double prev_preemp_event = controller.getCloudletService().getLastPreemptionTime();
-                class2PreemptedResponseTimeMV.addElement(currentResponseTime,cur_event,prev_preemp_event);
+                class2PreemptedResponseTimeSMV.addElement(currentResponseTime);
             }
 
         }
-
-        double prev_event = controller.getCloudService().getLastCompletion();
-        cloudResponseTimeMV.addElement(currentResponseTime,cur_event,prev_event);
-        handleCompletion(cur_event,prev_event,currentResponseTime,task);
+        cloudResponseTimeSMV.addElement(currentResponseTime);
+        handleCompletion(currentResponseTime,task);
     }
 
-    protected void handleCompletion(double cur_time, double prev_time,double currentResponseTime,AbstractTask task){
+    protected void handleCompletion(double currentResponseTime,AbstractTask task){
 
         /* update response time with Welford's Sample Path Algorithm */
-        systemResponseTimeMV.addElement(currentResponseTime,cur_time,prev_time);
+        systemResponseTimeSMV.addElement(currentResponseTime);
 
         boolean isTaskOne = (task instanceof TaskClassOne);
         if (isTaskOne) {
-            system1ResponseTimeMV.addElement(currentResponseTime,cur_time,prev_time);
+            system1ResponseTimeSMV.addElement(currentResponseTime);
         }
         else {
-            system2ResponseTimeMV.addElement(currentResponseTime,cur_time,prev_time);
+            system2ResponseTimeSMV.addElement(currentResponseTime);
         }
-
 
 
         int index = controller.getCloudletService().getClassOneCompletion() +
@@ -241,9 +232,9 @@ public class Performance {
         System.out.println("\n\tfor " + index + " jobs");
 
         System.out.println("\n\tsystem utilization ...................... =   " + f.format(systemArea.service / clock.getCurrent()));
-        System.out.println("\tsystem weighted mean response time....... =   " + f.format(systemResponseTimeMV.getMean())+ " s");
-        System.out.println("\ttype 1 mean response time................ =   " + f.format(system1ResponseTimeMV.getMean())+ " s");
-        System.out.println("\ttype 2 mean response time................ =   " + f.format(system2ResponseTimeMV.getMean())+ " s");
+        System.out.println("\tsystem mean response time................ =   " + f.format(systemResponseTimeSMV.getMean())+ " s");
+        System.out.println("\ttype 1 mean response time................ =   " + f.format(system1ResponseTimeSMV.getMean())+ " s");
+        System.out.println("\ttype 2 mean response time................ =   " + f.format(system2ResponseTimeSMV.getMean())+ " s");
         System.out.println("\tsystem throughput ....................... =   " + f.format(index / clock.getCurrent()));
         System.out.println("\ttype 1 throughput ....................... =   "
                 + f.format((cloudletClassOneCompletion+cloudClassOneCompletion) / clock.getCurrent()));
@@ -254,18 +245,18 @@ public class Performance {
         System.out.println("\tcloudlet mean population ................ =   " + f.format(cloudletArea.node / clock.getCurrent()));
         System.out.println("\ttype 1................................... =   " + f.format(cloudlet1Area.node / clock.getCurrent()));
         System.out.println("\ttype 2................................... =   " + f.format(cloudlet2Area.node / clock.getCurrent()));
-        System.out.println("\tcloudlet mean response time.............. =   " + f.format(cloudletResponseTimeMV.getMean()) + " s");
-        System.out.println("\ttype 1................................... =   " + f.format(cloudlet1ResponseTimeMV.getMean())+ " s");
-        System.out.println("\ttype 2................................... =   " + f.format(cloudlet2ResponseTimeMV.getMean())+ " s");
+        System.out.println("\tcloudlet mean response time.............. =   " + f.format(cloudletResponseTimeSMV.getMean()) + " s");
+        System.out.println("\ttype 1................................... =   " + f.format(cloudlet1ResponseTimeSMV.getMean())+ " s");
+        System.out.println("\ttype 2................................... =   " + f.format(cloudlet2ResponseTimeSMV.getMean())+ " s");
         System.out.println("\tcloudlet throughput ..................... =   " + f.format(cloudletIndex /clock.getCurrent()));
 
         System.out.println("\n\tcloud utilization ....................... =   " + f.format(cloudArea.service / clock.getCurrent()));
         System.out.println("\tcloud mean population ................... =   " + f.format(cloudArea.node / clock.getCurrent()));
         System.out.println("\ttype 1................................... =   " + f.format(cloud1Area.node / clock.getCurrent()));
         System.out.println("\ttype 2................................... =   " + f.format(cloud2Area.node / clock.getCurrent()));
-        System.out.println("\tcloud mean response time................. =   " + f.format(cloudResponseTimeMV.getMean())+ " s");
-        System.out.println("\ttype 1................................... =   " + f.format(cloud1ResponseTimeMV.getMean())+ " s");
-        System.out.println("\ttype 2................................... =   " + f.format(cloud2ResponseTimeMV.getMean())+ " s");
+        System.out.println("\tcloud mean response time................. =   " + f.format(cloudResponseTimeSMV.getMean())+ " s");
+        System.out.println("\ttype 1................................... =   " + f.format(cloud1ResponseTimeSMV.getMean())+ " s");
+        System.out.println("\ttype 2................................... =   " + f.format(cloud2ResponseTimeSMV.getMean())+ " s");
         System.out.println("\tcloud throughput ........................ =   " + f.format(cloudIndex / clock.getCurrent()));
 
         System.out.println("\n\teffective cloudlet throughput ........... =   " + f.format(cloudletIndex /clock.getCurrent()));
@@ -274,18 +265,18 @@ public class Performance {
 
         System.out.println("\n\tpercentage type 2 preempted ............. =   " + f.format(percentage2Preemption) +" %");
         System.out.println("\ttotal task 2 preempted .................. =   " + totalClassTwoPreemption);
-        System.out.println("\tmean response time preempted ............ =   " + f.format(class2PreemptedResponseTimeMV.getMean())+ " s");
+        System.out.println("\tmean response time preempted ............ =   " + f.format(class2PreemptedResponseTimeSMV.getMean())+ " s");
 
         if (AppConfiguration.TEST_S){
-            if (systemResponseTimeMV.getMean() < minResponseTime){
-                minResponseTime = systemResponseTimeMV.getMean();
+            if (systemResponseTimeSMV.getMean() < minResponseTime){
+                minResponseTime = systemResponseTimeSMV.getMean();
                 sGlobal = AppConfiguration.S;
             }
-            if (cloudletResponseTimeMV.getMean() < cloudletMinResponseTime){
-                cloudletMinResponseTime = cloudletResponseTimeMV.getMean();
+            if (cloudletResponseTimeSMV.getMean() < cloudletMinResponseTime){
+                cloudletMinResponseTime = cloudletResponseTimeSMV.getMean();
                 sCloudlet = AppConfiguration.S;
-            }if (cloudResponseTimeMV.getMean() < cloudMinResponseTime){
-                cloudMinResponseTime = cloudResponseTimeMV.getMean();
+            }if (cloudResponseTimeSMV.getMean() < cloudMinResponseTime){
+                cloudMinResponseTime = cloudResponseTimeSMV.getMean();
                 sCloud = AppConfiguration.S;
             }
             System.out.println("System min response time: " + minResponseTime + " s for S = " + sGlobal);
@@ -297,5 +288,81 @@ public class Performance {
         ciman.setTotalCompletedJobs(index);
 
         ciman.printIntervalMeans();
+
+        checkIntervals(ciman,
+                    index,
+                    cloudClassOneCompletion,
+                    cloudletClassOneCompletion,
+                    cloudletClassTwoCompletion,
+                    cloudClassTwoCompletion,
+                    cloudIndex,
+                    cloudletIndex);
+    }
+
+    private void checkIntervals(ConfidenceIntervalManager ciman, int index, int cloudClassOneCompletion, int cloudletClassOneCompletion, int cloudletClassTwoCompletion, int cloudClassTwoCompletion, int cloudIndex, int cloudletIndex) {
+        System.out.println("\n\t----- CONFIDENCE INTERVAL ESTIMATION VERIFICATION -------------------------");
+
+        System.out.println("\n\tSystem utilization ...................... =   " +
+                ciman.isInRange(systemArea.service / clock.getCurrent(),ciman.batchSystemUtilizationSMV));
+        System.out.println("\tSystem mean response time................ =   " +
+                ciman.isInRange(systemResponseTimeSMV.getMean(),ciman.batchSystemResponseTimeSMV));
+        System.out.println("\tSystem throughput ....................... =   " +
+                ciman.isInRange(index / clock.getCurrent(),ciman.batchSystemThroughputSMV));
+
+        System.out.println("\n\tCloudlet mean response time.............. =   " +
+                ciman.isInRange(cloudletResponseTimeSMV.getMean(),ciman.batchCloudletResponseTimeSMV));
+        System.out.println("\tType 1................................... =   " +
+                ciman.isInRange(cloudlet1ResponseTimeSMV.getMean(),ciman.batchCloudlet1ResponseTimeSMV));
+        System.out.println("\tType 2................................... =   " +
+                ciman.isInRange(cloudlet2ResponseTimeSMV.getMean(),ciman.batchCloudlet2ResponseTimeSMV));
+
+
+        System.out.println("\n\tCloud mean response time................. =   " +
+                ciman.isInRange(cloudResponseTimeSMV.getMean(),ciman.batchCloudResponseTimeSMV));
+        System.out.println("\tType 1................................... =   " +
+                ciman.isInRange(cloud1ResponseTimeSMV.getMean(),ciman.batchCloud1ResponseTimeSMV));
+        System.out.println("\tType 2................................... =   " +
+                ciman.isInRange(cloud2ResponseTimeSMV.getMean(),ciman.batchCloud2ResponseTimeSMV));
+
+
+        System.out.println("\n\tCloudlet mean population ................ =   " +
+                ciman.isInRange(cloudletArea.node / clock.getCurrent(),ciman.batchCloudletPopulationSMV));
+        System.out.println("\tType 1................................... =   " +
+                ciman.isInRange(cloudlet1Area.node / clock.getCurrent(),ciman.batchCloudlet1PopulationSMV));
+        System.out.println("\tType 2................................... =   " +
+                ciman.isInRange(cloudlet2Area.node / clock.getCurrent(),ciman.batchCloudlet2PopulationSMV));
+
+
+
+        System.out.println("\n\tCloud mean population ................... =   " +
+                ciman.isInRange(cloudArea.node / clock.getCurrent(),ciman.batchCloudPopulationSMV));
+        System.out.println("\tType 1................................... =   " +
+                ciman.isInRange(cloud1Area.node / clock.getCurrent(),ciman.batchCloud1PopulationSMV));
+        System.out.println("\tType 2................................... =   " +
+                ciman.isInRange(cloud2Area.node / clock.getCurrent(),ciman.batchCloud2PopulationSMV));
+
+
+        System.out.println("\n\tType 1 mean response time................ =   " +
+                ciman.isInRange(system1ResponseTimeSMV.getMean(),ciman.batch1SystemResponseTimeSMV));
+        System.out.println("\tType 2 mean response time................ =   " +
+                ciman.isInRange(system2ResponseTimeSMV.getMean(),ciman.batch2SystemResponseTimeSMV));
+
+
+        System.out.println("\n\tType 1 throughput ....................... =   " +
+                ciman.isInRange((cloudletClassOneCompletion+cloudClassOneCompletion) / clock.getCurrent(),ciman.batch1SystemThroughputSMV));
+        System.out.println("\tType 2 throughput ....................... =   " +
+                ciman.isInRange((cloudletClassTwoCompletion+cloudClassTwoCompletion) / clock.getCurrent(),ciman.batch2SystemThroughputSMV));
+
+        System.out.println("\n\tCloudlet effective throughput type 1..... =   " +
+                ciman.isInRange(cloudletClassOneCompletion /clock.getCurrent(),ciman.batch1EffectiveCloudletThroughputSMV));
+
+        System.out.println("\tCloudlet effective throughput type 2..... =   " +
+                ciman.isInRange(cloudletClassTwoCompletion /clock.getCurrent(),ciman.batch2EffectiveCloudletThroughputSMV));
+
+
+        System.out.println("\n\tMean response time preempted ............ =   " +
+                ciman.isInRange(class2PreemptedResponseTimeSMV.getMean(),ciman.batch2PreemptedResponseTimeSMV));
+
+
     }
 }

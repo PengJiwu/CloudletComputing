@@ -35,11 +35,6 @@ public class Cloud {
     /* Event queue */
     private EventQueue eventQueue;
 
-    /* Task Class One last completion */
-    private double lastCompletionClassOne;
-
-    /* Task Class Two last completion */
-    private double lastCompletionClassTwo;
 
     public Cloud() {
         this.n1 = 0;
@@ -49,8 +44,6 @@ public class Cloud {
         this.taskList = new ArrayList<>();
         this.distributions = Distributions.getInstance();
         this.eventQueue = EventQueue.getInstance();
-        this.lastCompletionClassOne = 0.0;
-        this.lastCompletionClassTwo = 0.0;
     }
 
     public void assignServer(AbstractTask task){
@@ -85,18 +78,13 @@ public class Cloud {
         if (task instanceof TaskClassOne){
             this.classOneCompletion++;
             this.n1--;
-            this.lastCompletionClassOne = task.getCompletionTime();
         }
         else{
             this.classTwoCompletion++;
             this.n2--;
-            this.lastCompletionClassTwo = task.getCompletionTime();
         }
     }
 
-    public double getLastCompletion(){
-        return Double.max(this.lastCompletionClassOne,this.lastCompletionClassTwo);
-    }
 
     /**
      * Getter and Setter
@@ -115,14 +103,6 @@ public class Cloud {
 
     public Integer getN2() {
         return n2;
-    }
-
-    public double getLastCompletionClassOne() {
-        return lastCompletionClassOne;
-    }
-
-    public double getLastCompletionClassTwo() {
-        return lastCompletionClassTwo;
     }
 
 }
