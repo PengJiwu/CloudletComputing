@@ -289,14 +289,15 @@ public class Performance {
 
         ciman.printIntervalMeans();
 
-        checkIntervals(ciman,
+        /*checkIntervals(ciman,
                     index,
                     cloudClassOneCompletion,
                     cloudletClassOneCompletion,
                     cloudletClassTwoCompletion,
                     cloudClassTwoCompletion,
                     cloudIndex,
-                    cloudletIndex);
+                    cloudletIndex);*/
+
     }
 
     private void checkIntervals(ConfidenceIntervalManager ciman, int index, int cloudClassOneCompletion, int cloudletClassOneCompletion, int cloudletClassTwoCompletion, int cloudClassTwoCompletion, int cloudIndex, int cloudletIndex) {

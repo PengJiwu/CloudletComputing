@@ -58,7 +58,7 @@ public class Simulation {
         performance.closeWriters();
         Clock.restart();
         EventQueue.fill();
-        setupEnvironment();
+
     }
 
     private static void run(){

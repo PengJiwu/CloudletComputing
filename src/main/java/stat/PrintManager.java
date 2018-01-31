@@ -53,23 +53,24 @@ public class PrintManager {
     }
 
     public void writeFiles() {
-        systemUtilizationWriter.println(batch.batchSystemUtilization / AppConfiguration.BATCH_SIZE);
-        systemResponseTimeWriter.println(batch.batchSystemResponseTime / AppConfiguration.BATCH_SIZE);
-        systemThroughputWriter.println(batch.batchSystemThroughput / AppConfiguration.BATCH_SIZE);
+        //systemUtilizationWriter.println(batch.batchSystemUtilization / AppConfiguration.BATCH_SIZE);
+        //systemResponseTimeWriter.println(batch.batchSystemResponseTime / AppConfiguration.BATCH_SIZE);
+        systemThroughputWriter.println(batch.batchSystemThroughput/ AppConfiguration.BATCH_SIZE );
 
-        cloudletResponseTimeWriter.println(batch.batchCloudletResponseTime / AppConfiguration.BATCH_SIZE);
-        cloudlet1ResponseTimeWriter.println(batch.batchCloudlet1ResponseTime / AppConfiguration.BATCH_SIZE);
-        cloudlet2ResponseTimeWriter.println(batch.batchCloudlet2ResponseTime / AppConfiguration.BATCH_SIZE);
-        cloudResponseTimeWriter.println(batch.batchCloudResponseTime / AppConfiguration.BATCH_SIZE);
-        cloud1ResponseTimeWriter.println(batch.batchCloud1ResponseTime / AppConfiguration.BATCH_SIZE);
-        cloud2ResponseTimeWriter.println(batch.batchCloud2ResponseTime / AppConfiguration.BATCH_SIZE);
-
-        cloudletPopulationWriter.println(batch.batchCloudletPopulation / AppConfiguration.BATCH_SIZE);
-        cloudlet1PopulationWriter.println(batch.batchCloudlet1Population / AppConfiguration.BATCH_SIZE);
-        cloudlet2PopulationWriter.println(batch.batchCloudlet2Population / AppConfiguration.BATCH_SIZE);
-        cloudPopulationWriter.println(batch.batchCloudPopulation / AppConfiguration.BATCH_SIZE);
-        cloud1PopulationWriter.println(batch.batchCloud1Population / AppConfiguration.BATCH_SIZE);
-        cloud2PopulationWriter.println(batch.batchCloud2Population / AppConfiguration.BATCH_SIZE);
+        //
+        //cloudletResponseTimeWriter.println(batch.batchCloudletResponseTime / AppConfiguration.BATCH_SIZE);
+        //cloudlet1ResponseTimeWriter.println(batch.batchCloudlet1ResponseTime / AppConfiguration.BATCH_SIZE);
+        //cloudlet2ResponseTimeWriter.println(batch.batchCloudlet2ResponseTime / AppConfiguration.BATCH_SIZE);
+        //cloudResponseTimeWriter.println(batch.batchCloudResponseTime / AppConfiguration.BATCH_SIZE);
+        //cloud1ResponseTimeWriter.println(batch.batchCloud1ResponseTime / AppConfiguration.BATCH_SIZE);
+        //cloud2ResponseTimeWriter.println(batch.batchCloud2ResponseTime / AppConfiguration.BATCH_SIZE);
+        //
+        //cloudletPopulationWriter.println(batch.batchCloudletPopulation / AppConfiguration.BATCH_SIZE);
+        //cloudlet1PopulationWriter.println(batch.batchCloudlet1Population / AppConfiguration.BATCH_SIZE);
+        //cloudlet2PopulationWriter.println(batch.batchCloudlet2Population / AppConfiguration.BATCH_SIZE);
+        //cloudPopulationWriter.println(batch.batchCloudPopulation / AppConfiguration.BATCH_SIZE);
+        //cloud1PopulationWriter.println(batch.batchCloud1Population / AppConfiguration.BATCH_SIZE);
+        //cloud2PopulationWriter.println(batch.batchCloud2Population / AppConfiguration.BATCH_SIZE);
     }
 
     /**

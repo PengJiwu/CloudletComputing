@@ -144,9 +144,10 @@ public class BatchManager {
     }
 
     private void updateIntervalsAndReset(int index) {
+
         if (index % AppConfiguration.BATCH_SIZE == 0){
+            printman.writeFiles();
             ciman.updateInterval();
-            //printman.writeFiles();
             resetIndexes();
         }
     }

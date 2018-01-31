@@ -35,12 +35,6 @@ public class Cloudlet {
     /* Event queue */
     private EventQueue eventQueue;
 
-    /* Task Class One last completion */
-    private double lastCompletionClassOne;
-
-    /* Task Class Two last completion */
-    private double lastCompletionClassTwo;
-
     /* Percentage of Task Class Two */
     private double percentage2Preemption;
 
@@ -60,8 +54,6 @@ public class Cloudlet {
         this.distributions = Distributions.getInstance();
         this.taskList = new ArrayList<>();
         this.eventQueue = EventQueue.getInstance();
-        this.lastCompletionClassOne = 0.0;
-        this.lastCompletionClassTwo = 0.0;
         this.percentage2Preemption = 0.0;
 
     }
@@ -121,12 +113,10 @@ public class Cloudlet {
         if (task instanceof TaskClassOne){
             this.n1--;
             this.classOneCompletion++;
-            this.lastCompletionClassOne = task.getCompletionTime();
         }
         else{
             this.n2--;
             this.classTwoCompletion++;
-            this.lastCompletionClassTwo = task.getCompletionTime();
         }
     }
 
@@ -140,9 +130,6 @@ public class Cloudlet {
         }
     }
 
-    public double getLastCompletion(){
-        return Double.max(this.lastCompletionClassOne,this.lastCompletionClassTwo);
-    }
 
     private void updatePercentage2Preemption() {
         this.percentage2Preemption = (double) this.totalClassTwoPreemption / (double) this.totalClassTwoAssigned;

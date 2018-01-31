@@ -1,5 +1,6 @@
 package utils;
 
+import config.AppConfiguration;
 import library.Rngs;
 import library.Rvgs;
 
@@ -12,7 +13,7 @@ public class Distributions {
 
     private Distributions() {
         rngs = new Rngs();
-        rngs.plantSeeds(123456789);
+        rngs.plantSeeds(AppConfiguration.SEED);
         rvgs = new Rvgs(this.rngs);
     }
 

@@ -20,6 +20,7 @@ public class AppConfiguration {
     public static double STOP = 0.0;
     public static int BATCH_SIZE = 256;
     public static boolean TEST_S = false;
+    public static long SEED = 0;
 
     public static void readConfiguration() {
         try {
@@ -39,6 +40,7 @@ public class AppConfiguration {
             N = Integer.parseInt(prop.getProperty("N"));
             BATCH_SIZE = Integer.parseInt(prop.getProperty("BATCH_SIZE"));
             TEST_S = Boolean.valueOf(prop.getProperty("TEST_S"));
+            SEED = Long.parseLong(prop.getProperty("SEED"));
         }
         catch (Exception e) {
             e.printStackTrace();
