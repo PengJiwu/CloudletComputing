@@ -41,6 +41,7 @@ public class BatchManager {
     protected double batch1SystemThroughput;
     protected double batch2SystemThroughput;
 
+    protected double batchEffectiveCloudletThroughput;
     protected double batch1EffectiveCloudletThroughput;
     protected double batch2EffectiveCloudletThroughput;
 
@@ -83,6 +84,7 @@ public class BatchManager {
         batch1SystemThroughput = 0.0;
         batch2SystemThroughput = 0.0;
 
+        batchEffectiveCloudletThroughput = 0.0;
         batch1EffectiveCloudletThroughput = 0.0;
         batch2EffectiveCloudletThroughput = 0.0;
 
@@ -132,7 +134,7 @@ public class BatchManager {
         batchCloud2Population += per.cloud2Area.node / current_time;
 
 
-
+        batchEffectiveCloudletThroughput += (cloudletClassOneCompletion + cloudletClassTwoCompletion) / current_time;
         batch1EffectiveCloudletThroughput += cloudletClassOneCompletion / current_time;
         batch2EffectiveCloudletThroughput += cloudletClassTwoCompletion / current_time;
 

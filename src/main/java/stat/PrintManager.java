@@ -14,6 +14,7 @@ public class PrintManager {
     private PrintWriter systemThroughputWriter;
     private PrintWriter systemResponseTimeWriter;
     private PrintWriter cloudletResponseTimeWriter;
+    private PrintWriter cloudletThroughputWriter;
     private PrintWriter cloudlet1ResponseTimeWriter;
     private PrintWriter cloudlet2ResponseTimeWriter;
     private PrintWriter cloudResponseTimeWriter;
@@ -106,6 +107,8 @@ public class PrintManager {
         systemResponseTimeWriter = createPrintWriter("output/system/response_time.txt");
 
         // cloudlet stats
+        cloudletThroughputWriter = createPrintWriter("output/cloudlet/throughput.txt");
+
         cloudletResponseTimeWriter = createPrintWriter("output/cloudlet/response_time.txt");
         cloudlet1ResponseTimeWriter = createPrintWriter("output/cloudlet/response_time_class_one.txt");
         cloudlet2ResponseTimeWriter = createPrintWriter("output/cloudlet/response_time_class_two.txt");
@@ -128,6 +131,8 @@ public class PrintManager {
         systemUtilizationWriter.close();
         systemResponseTimeWriter.close();
         systemThroughputWriter.close();
+
+        cloudletThroughputWriter.close();
 
         cloudletResponseTimeWriter.close();
         cloudlet1ResponseTimeWriter.close();

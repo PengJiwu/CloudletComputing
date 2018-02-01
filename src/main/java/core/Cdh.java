@@ -32,8 +32,8 @@ class Outliers {
 
 class Cdh {
 
-    static double MIN   = 9.0;
-    static double MAX   = 13.0;
+    static double MIN   = 0.0;
+    static double MAX   = 8.0;
     static int    K     = 64;                        /* number of histogram bins   */
     static double DELTA = ((MAX - MIN) / K);         /* histogram bin size (width) */
 
@@ -60,7 +60,7 @@ class Cdh {
         String line = null;
         String path = System.getProperty("user.dir");
 
-        BufferedReader in = new BufferedReader(new FileReader( path+"/output/system/throughput.txt"));
+        BufferedReader in = new BufferedReader(new FileReader( path+"/output/cloudlet/throughput.txt"));
 
         try {
             while ( (line = in.readLine()) != null ) {

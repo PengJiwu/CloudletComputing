@@ -114,6 +114,7 @@ public class Performance {
         /* update system integrals */
         if (number > 0)  {
             systemArea.service += (clock.getNext() - clock.getCurrent());
+            systemArea.node += (clock.getNext() - clock.getCurrent())*(number);
         }
         /* update cloudlet integrals */
         if (n1 + n2 > 0)  {
@@ -232,6 +233,7 @@ public class Performance {
         System.out.println("\n\tfor " + index + " jobs");
 
         System.out.println("\n\tsystem utilization ...................... =   " + f.format(systemArea.service / clock.getCurrent()));
+        System.out.println("\tsystem mean population .................. =   " + f.format(systemArea.node / clock.getCurrent()));
         System.out.println("\tsystem mean response time................ =   " + f.format(systemResponseTimeSMV.getMean())+ " s");
         System.out.println("\ttype 1 mean response time................ =   " + f.format(system1ResponseTimeSMV.getMean())+ " s");
         System.out.println("\ttype 2 mean response time................ =   " + f.format(system2ResponseTimeSMV.getMean())+ " s");
