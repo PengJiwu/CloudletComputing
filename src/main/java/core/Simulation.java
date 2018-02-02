@@ -62,11 +62,16 @@ public class Simulation {
     }
 
     private static void run(){
+        int i = 1;
+        int stopJobs = AppConfiguration.BATCH_SIZE * AppConfiguration.NUM_BATCH;
 
         while (clock.getArrival() == AppConfiguration.START || eventQueue.getQueueSize() > 0){
-            if (clock.getArrival() < AppConfiguration.STOP){
+            if (clock.getArrival() < AppConfiguration.STOP
+                    //&& i < stopJobs
+                    ){
                 AbstractEvent event = eventGenerator.generateArrival();
                 eventQueue.addEvent(event);
+                i++;
             }
             AbstractEvent toHandle = eventQueue.getFirstAvailableEvent();
             clock.setNext(toHandle.getEventTime());
@@ -87,5 +92,24 @@ public class Simulation {
             }
         }
         performance.printResults();
+
+        /*
+        double p = controller.getCloudletService().getClassOneCompletion()
+                / (double) (controller.getCloudletService().getClassOneCompletion() + controller.getCloudService().getClassOneCompletion());
+
+        double q = (controller.getCloudletService().getClassTwoCompletion() + controller.getCloudletService().getTotalClassTwoPreemption())
+                / (double) ( controller.getCloudService().getClassTwoCompletion()
+                + controller.getCloudletService().getClassTwoCompletion());
+
+        double r = (controller.getCloudletService().getTotalClassTwoPreemption()) / (double)
+                (controller.getCloudletService().getClassOneCompletion() +
+                controller.getCloudletService().getClassTwoCompletion() +
+                controller.getCloudletService().getTotalClassTwoPreemption());
+
+        System.out.println("p = "+p);
+        System.out.println("q = "+q);
+        System.out.println("r = "+r);
+        */
+
     }
 }

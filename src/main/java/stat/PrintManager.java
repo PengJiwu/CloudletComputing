@@ -56,9 +56,12 @@ public class PrintManager {
     public void writeFiles() {
         //systemUtilizationWriter.println(batch.batchSystemUtilization / AppConfiguration.BATCH_SIZE);
         //systemResponseTimeWriter.println(batch.batchSystemResponseTime / AppConfiguration.BATCH_SIZE);
-        systemThroughputWriter.println(batch.batchSystemThroughput/ AppConfiguration.BATCH_SIZE );
+        //systemThroughputWriter.println(batch.batchSystemThroughput/ AppConfiguration.BATCH_SIZE );
 
-        //
+        cloudletThroughputWriter.println(batch.batchEffectiveCloudletThroughput / AppConfiguration.BATCH_SIZE);
+
+
+
         //cloudletResponseTimeWriter.println(batch.batchCloudletResponseTime / AppConfiguration.BATCH_SIZE);
         //cloudlet1ResponseTimeWriter.println(batch.batchCloudlet1ResponseTime / AppConfiguration.BATCH_SIZE);
         //cloudlet2ResponseTimeWriter.println(batch.batchCloudlet2ResponseTime / AppConfiguration.BATCH_SIZE);
