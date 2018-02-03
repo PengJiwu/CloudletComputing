@@ -48,6 +48,13 @@ public class BatchManager {
     protected double batch2PreemptedResponseTime;
     protected double batch2TotalPreemptedTask;
     protected double batch2TotalClassTwoAssigned;
+    protected double batchSystemPopulation;
+
+    protected double batchCloudletUtilization;
+    protected double batchCloudUtilization;
+    protected double batchCloudThroughput;
+
+
 
     public BatchManager(Performance p) {
         this.per = p;
@@ -91,6 +98,11 @@ public class BatchManager {
         batch2PreemptedResponseTime = 0.0;
         batch2TotalPreemptedTask = 0.0;
         batch2TotalClassTwoAssigned = 0.0;
+
+        batchSystemPopulation = 0.0;
+        batchCloudletUtilization = 0.0;
+        batchCloudUtilization = 0.0;
+        batchCloudThroughput = 0.0;
     }
 
     public void updateBatch(int index) {
@@ -98,12 +110,15 @@ public class BatchManager {
         double current_time = per.clock.getCurrent();
 
         batchSystemUtilization += per.systemArea.service / current_time;
+        batchCloudletUtilization += per.cloudletArea.service / current_time;
+        batchCloudUtilization += per.cloudArea.service / current_time;
 
         batchSystemResponseTime += per.systemResponseTimeSMV.getMean();
         batch1SystemResponseTime += per.system1ResponseTimeSMV.getMean();
         batch2SystemResponseTime += per.system2ResponseTimeSMV.getMean();
 
         batchSystemThroughput += index / per.clock.getCurrent();
+
 
         int cloudletClassOneCompletion = per.controller.getCloudletService().getClassOneCompletion();
         int cloudletClassTwoCompletion = per.controller.getCloudletService().getClassTwoCompletion();
@@ -117,6 +132,7 @@ public class BatchManager {
         batch1SystemThroughput += (cloudletClassOneCompletion+cloudClassOneCompletion) / current_time;
         batch2SystemThroughput +=(cloudletClassTwoCompletion+cloudClassTwoCompletion) / current_time;
 
+        batchCloudThroughput += cloudIndex / current_time;
 
 
         batchCloudletResponseTime += per.cloudletResponseTimeSMV.getMean();
@@ -126,6 +142,7 @@ public class BatchManager {
         batchCloud1ResponseTime += per.cloud1ResponseTimeSMV.getMean();
         batchCloud2ResponseTime += per.cloud2ResponseTimeSMV.getMean();
 
+        batchSystemPopulation += per.systemArea.node / current_time;
         batchCloudletPopulation += per.cloudletArea.node / current_time;
         batchCloudlet1Population += per.cloudlet1Area.node / current_time;
         batchCloudlet2Population += per.cloudlet2Area.node / current_time;

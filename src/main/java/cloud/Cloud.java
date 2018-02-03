@@ -54,7 +54,7 @@ public class Cloud {
             task.setServiceTime(distributions.exponential(AppConfiguration.CLOUD_M2,7));
             TaskClassTwo swapped = (TaskClassTwo) task;
             if (swapped.isSwapped())
-                swapped.setSetupTime(distributions.exponential(AppConfiguration.SETUP_TIME,8));
+                swapped.setSetupTime(distributions.exponential(1/AppConfiguration.SETUP_TIME,8));
             task = swapped;
         }
         this.incrementPopulation(task);

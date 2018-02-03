@@ -29,6 +29,8 @@ public class ConfidenceIntervalManager {
     protected SimpleMeanValue batchCloud1ResponseTimeSMV;
     protected SimpleMeanValue batchCloud2ResponseTimeSMV;
 
+    protected SimpleMeanValue batchSystemPopulationSMV;
+
     protected SimpleMeanValue batchCloudletPopulationSMV;
     protected SimpleMeanValue batchCloudlet1PopulationSMV;
     protected SimpleMeanValue batchCloudlet2PopulationSMV;
@@ -47,6 +49,12 @@ public class ConfidenceIntervalManager {
     protected SimpleMeanValue batch2EffectiveCloudletThroughputSMV;
 
     protected SimpleMeanValue batch2PreemptedResponseTimeSMV;
+
+    protected SimpleMeanValue batchEffectiveCloudletThroughputSMV;
+    protected SimpleMeanValue batchCloudletUtilizationSMV;
+    protected SimpleMeanValue batchCloudUtilizationSMV;
+    protected SimpleMeanValue batchCloudThroughputSMV;
+
 
 
 
@@ -93,6 +101,13 @@ public class ConfidenceIntervalManager {
 
         batch2PreemptedResponseTimeSMV = new SimpleMeanValue();
 
+        batchSystemPopulationSMV = new SimpleMeanValue();
+
+        batchEffectiveCloudletThroughputSMV = new SimpleMeanValue();
+        batchCloudletUtilizationSMV = new SimpleMeanValue();
+        batchCloudUtilizationSMV = new SimpleMeanValue();
+        batchCloudThroughputSMV = new SimpleMeanValue();
+
     }
 
     public void updateInterval() {
@@ -102,6 +117,7 @@ public class ConfidenceIntervalManager {
         batchSystemUtilizationSMV.addElement(bman.batchSystemUtilization / bsize);
         batchSystemResponseTimeSMV.addElement(bman.batchSystemResponseTime / bsize);
         batchSystemThroughputSMV.addElement(bman.batchSystemThroughput / bsize);
+        batchSystemPopulationSMV.addElement(bman.batchSystemPopulation / bsize);
 
         batchCloudletResponseTimeSMV.addElement(bman.batchCloudletResponseTime / bsize);
         batchCloudlet1ResponseTimeSMV.addElement(bman.batchCloudlet1ResponseTime / bsize);
@@ -130,6 +146,10 @@ public class ConfidenceIntervalManager {
 
         batch2PreemptedResponseTimeSMV.addElement(bman.batch2PreemptedResponseTime / bsize);
 
+        batchEffectiveCloudletThroughputSMV.addElement(bman.batchEffectiveCloudletThroughput / bsize);
+        batchCloudletUtilizationSMV.addElement(bman.batchCloudletUtilization / bsize);
+        batchCloudUtilizationSMV.addElement(bman.batchCloudUtilization / bsize);
+        batchCloudThroughputSMV.addElement(bman.batchCloudThroughput / bsize);
 
     }
 
@@ -147,6 +167,11 @@ public class ConfidenceIntervalManager {
                     +f.format(getLowerEndPoint(batchSystemUtilizationSMV))+_space
                     +f.format(getUpperEndPoint(batchSystemUtilizationSMV))
         );
+        System.out.println("\tSystem mean population......................."+_space
+                +f.format(batchSystemPopulationSMV.getMean())+_space
+                +f.format(getLowerEndPoint(batchSystemPopulationSMV))+_space
+                +f.format(getUpperEndPoint(batchSystemPopulationSMV))
+        );
         System.out.println("\tSystem response time........................."+_space
                 +f.format(batchSystemResponseTimeSMV.getMean())+_space
                 +f.format(getLowerEndPoint(batchSystemResponseTimeSMV))+_space
@@ -158,7 +183,12 @@ public class ConfidenceIntervalManager {
                 +f.format(getUpperEndPoint(batchSystemThroughputSMV))
         );
 
-        System.out.println("\n\tCloudlet response time......................."+_space
+        System.out.println("\n\tCloudlet utilization........................."+_space
+                +f.format(batchCloudletUtilizationSMV.getMean())+_space
+                +f.format(getLowerEndPoint(batchCloudletUtilizationSMV))+_space
+                +f.format(getUpperEndPoint(batchCloudletUtilizationSMV))
+        );
+        System.out.println("\tCloudlet response time......................."+_space
                 +f.format(batchCloudletResponseTimeSMV.getMean())+_space
                 +f.format(getLowerEndPoint(batchCloudletResponseTimeSMV))+_space
                 +f.format(getUpperEndPoint(batchCloudletResponseTimeSMV))
@@ -174,7 +204,12 @@ public class ConfidenceIntervalManager {
                 +f.format(getUpperEndPoint(batchCloudlet2ResponseTimeSMV))
         );
 
-        System.out.println("\n\tCloud response time.........................."+_space
+        System.out.println("\n\tCloud utilization............................"+_space
+                +f.format(batchCloudUtilizationSMV.getMean())+_space
+                +f.format(getLowerEndPoint(batchCloudUtilizationSMV))+_space
+                +f.format(getUpperEndPoint(batchCloudUtilizationSMV))
+        );
+        System.out.println("\tCloud response time.........................."+_space
                 +f.format(batchCloudResponseTimeSMV.getMean())+_space
                 +f.format(getLowerEndPoint(batchCloudResponseTimeSMV))+_space
                 +f.format(getUpperEndPoint(batchCloudResponseTimeSMV))
@@ -245,7 +280,12 @@ public class ConfidenceIntervalManager {
                 +f.format(getUpperEndPoint(batch2SystemThroughputSMV))
         );
 
-        System.out.println("\n\tCloudlet effective throughput type 1........."+_space
+        System.out.println("\n\tCloudlet effective throughput ..............."+_space
+                +f.format(batchEffectiveCloudletThroughputSMV.getMean())+_space
+                +f.format(getLowerEndPoint(batchEffectiveCloudletThroughputSMV))+_space
+                +f.format(getUpperEndPoint(batchEffectiveCloudletThroughputSMV))
+        );
+        System.out.println("\tCloudlet effective throughput type 1........."+_space
                 +f.format(batch1EffectiveCloudletThroughputSMV.getMean())+_space
                 +f.format(getLowerEndPoint(batch1EffectiveCloudletThroughputSMV))+_space
                 +f.format(getUpperEndPoint(batch1EffectiveCloudletThroughputSMV))
@@ -254,6 +294,11 @@ public class ConfidenceIntervalManager {
                 +f.format(batch2EffectiveCloudletThroughputSMV.getMean())+_space
                 +f.format(getLowerEndPoint(batch2EffectiveCloudletThroughputSMV))+_space
                 +f.format(getUpperEndPoint(batch2EffectiveCloudletThroughputSMV))
+        );
+        System.out.println("\tCloud throughput ............................"+_space
+                +f.format(batchCloudThroughputSMV.getMean())+_space
+                +f.format(getLowerEndPoint(batchCloudThroughputSMV))+_space
+                +f.format(getUpperEndPoint(batchCloudThroughputSMV))
         );
 
 

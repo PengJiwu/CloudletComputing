@@ -67,7 +67,7 @@ public class Simulation {
 
         while (clock.getArrival() == AppConfiguration.START || eventQueue.getQueueSize() > 0){
             if (clock.getArrival() < AppConfiguration.STOP
-                    //&& i < stopJobs
+                    && i < stopJobs
                     ){
                 AbstractEvent event = eventGenerator.generateArrival();
                 eventQueue.addEvent(event);

@@ -59,6 +59,7 @@ public class PrintManager {
         //systemThroughputWriter.println(batch.batchSystemThroughput/ AppConfiguration.BATCH_SIZE );
 
         cloudletThroughputWriter.println(batch.batchEffectiveCloudletThroughput / AppConfiguration.BATCH_SIZE);
+        //cloudletThroughputWriter.println(batch.batchEffectiveCloudletThroughput);
 
 
 

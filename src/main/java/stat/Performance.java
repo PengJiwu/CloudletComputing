@@ -291,7 +291,7 @@ public class Performance {
 
         ciman.printIntervalMeans();
 
-        /*checkIntervals(ciman,
+       /* checkIntervals(ciman,
                     index,
                     cloudClassOneCompletion,
                     cloudletClassOneCompletion,
