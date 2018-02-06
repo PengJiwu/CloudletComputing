@@ -1,7 +1,6 @@
 package stat;
 
 import library.Rvms;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.text.DecimalFormat;
 
@@ -17,7 +16,6 @@ public class ConfidenceIntervalManager {
     protected double alpha = 0.05;
 
 
-    protected SimpleMeanValue batchSystemUtilizationSMV;
     protected SimpleMeanValue batchSystemResponseTimeSMV;
     protected SimpleMeanValue batchSystemThroughputSMV;
 
@@ -52,7 +50,6 @@ public class ConfidenceIntervalManager {
 
     protected SimpleMeanValue batchEffectiveCloudletThroughputSMV;
     protected SimpleMeanValue batchCloudletUtilizationSMV;
-    protected SimpleMeanValue batchCloudUtilizationSMV;
     protected SimpleMeanValue batchCloudThroughputSMV;
 
 
@@ -70,7 +67,6 @@ public class ConfidenceIntervalManager {
     }
 
     private void initSimpleMeanValues() {
-        batchSystemUtilizationSMV = new SimpleMeanValue();
         batchSystemResponseTimeSMV = new SimpleMeanValue();
         batchSystemThroughputSMV = new SimpleMeanValue();
 
@@ -105,7 +101,6 @@ public class ConfidenceIntervalManager {
 
         batchEffectiveCloudletThroughputSMV = new SimpleMeanValue();
         batchCloudletUtilizationSMV = new SimpleMeanValue();
-        batchCloudUtilizationSMV = new SimpleMeanValue();
         batchCloudThroughputSMV = new SimpleMeanValue();
 
     }
@@ -114,7 +109,6 @@ public class ConfidenceIntervalManager {
 
         // updates simple mean and variance with Welford's Simple Path Algorithm
 
-        batchSystemUtilizationSMV.addElement(bman.batchSystemUtilization / bsize);
         batchSystemResponseTimeSMV.addElement(bman.batchSystemResponseTime / bsize);
         batchSystemThroughputSMV.addElement(bman.batchSystemThroughput / bsize);
         batchSystemPopulationSMV.addElement(bman.batchSystemPopulation / bsize);
@@ -148,7 +142,6 @@ public class ConfidenceIntervalManager {
 
         batchEffectiveCloudletThroughputSMV.addElement(bman.batchEffectiveCloudletThroughput / bsize);
         batchCloudletUtilizationSMV.addElement(bman.batchCloudletUtilization / bsize);
-        batchCloudUtilizationSMV.addElement(bman.batchCloudUtilization / bsize);
         batchCloudThroughputSMV.addElement(bman.batchCloudThroughput / bsize);
 
     }
@@ -162,11 +155,6 @@ public class ConfidenceIntervalManager {
 
 
 
-        System.out.println("\n\tSystem utilization..........................."+_space
-                    +f.format(batchSystemUtilizationSMV.getMean())+_space
-                    +f.format(getLowerEndPoint(batchSystemUtilizationSMV))+_space
-                    +f.format(getUpperEndPoint(batchSystemUtilizationSMV))
-        );
         System.out.println("\tSystem mean population......................."+_space
                 +f.format(batchSystemPopulationSMV.getMean())+_space
                 +f.format(getLowerEndPoint(batchSystemPopulationSMV))+_space
@@ -204,11 +192,6 @@ public class ConfidenceIntervalManager {
                 +f.format(getUpperEndPoint(batchCloudlet2ResponseTimeSMV))
         );
 
-        System.out.println("\n\tCloud utilization............................"+_space
-                +f.format(batchCloudUtilizationSMV.getMean())+_space
-                +f.format(getLowerEndPoint(batchCloudUtilizationSMV))+_space
-                +f.format(getUpperEndPoint(batchCloudUtilizationSMV))
-        );
         System.out.println("\tCloud response time.........................."+_space
                 +f.format(batchCloudResponseTimeSMV.getMean())+_space
                 +f.format(getLowerEndPoint(batchCloudResponseTimeSMV))+_space

@@ -15,7 +15,6 @@ public class BatchManager {
 
     protected int batch_size;
 
-    protected double batchSystemUtilization;
     protected double batchSystemResponseTime;
     protected double batchSystemThroughput;
 
@@ -51,7 +50,6 @@ public class BatchManager {
     protected double batchSystemPopulation;
 
     protected double batchCloudletUtilization;
-    protected double batchCloudUtilization;
     protected double batchCloudThroughput;
 
 
@@ -67,7 +65,6 @@ public class BatchManager {
     }
 
     protected void resetIndexes(){
-        batchSystemUtilization = 0.0;
         batchSystemResponseTime = 0.0;
         batchSystemThroughput = 0.0;
 
@@ -100,18 +97,14 @@ public class BatchManager {
         batch2TotalClassTwoAssigned = 0.0;
 
         batchSystemPopulation = 0.0;
-        batchCloudletUtilization = 0.0;
-        batchCloudUtilization = 0.0;
-        batchCloudThroughput = 0.0;
+        batchCloudletUtilization = 0.0;batchCloudThroughput = 0.0;
     }
 
     public void updateBatch(int index) {
 
         double current_time = per.clock.getCurrent();
 
-        batchSystemUtilization += per.systemArea.service / current_time;
         batchCloudletUtilization += per.cloudletArea.service / current_time;
-        batchCloudUtilization += per.cloudArea.service / current_time;
 
         batchSystemResponseTime += per.systemResponseTimeSMV.getMean();
         batch1SystemResponseTime += per.system1ResponseTimeSMV.getMean();

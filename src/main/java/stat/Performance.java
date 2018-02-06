@@ -232,7 +232,6 @@ public class Performance {
 
         System.out.println("\n\tfor " + index + " jobs");
 
-        System.out.println("\n\tsystem utilization ...................... =   " + f.format(systemArea.service / clock.getCurrent()));
         System.out.println("\tsystem mean population .................. =   " + f.format(systemArea.node / clock.getCurrent()));
         System.out.println("\tsystem mean response time................ =   " + f.format(systemResponseTimeSMV.getMean())+ " s");
         System.out.println("\ttype 1 mean response time................ =   " + f.format(system1ResponseTimeSMV.getMean())+ " s");
@@ -252,7 +251,6 @@ public class Performance {
         System.out.println("\ttype 2................................... =   " + f.format(cloudlet2ResponseTimeSMV.getMean())+ " s");
         System.out.println("\tcloudlet throughput ..................... =   " + f.format(cloudletIndex /clock.getCurrent()));
 
-        System.out.println("\n\tcloud utilization ....................... =   " + f.format(cloudArea.service / clock.getCurrent()));
         System.out.println("\tcloud mean population ................... =   " + f.format(cloudArea.node / clock.getCurrent()));
         System.out.println("\ttype 1................................... =   " + f.format(cloud1Area.node / clock.getCurrent()));
         System.out.println("\ttype 2................................... =   " + f.format(cloud2Area.node / clock.getCurrent()));
@@ -305,8 +303,7 @@ public class Performance {
     private void checkIntervals(ConfidenceIntervalManager ciman, int index, int cloudClassOneCompletion, int cloudletClassOneCompletion, int cloudletClassTwoCompletion, int cloudClassTwoCompletion, int cloudIndex, int cloudletIndex) {
         System.out.println("\n\t----- CONFIDENCE INTERVAL ESTIMATION VERIFICATION -------------------------");
 
-        System.out.println("\n\tSystem utilization ...................... =   " +
-                ciman.isInRange(systemArea.service / clock.getCurrent(),ciman.batchSystemUtilizationSMV));
+
         System.out.println("\tSystem mean response time................ =   " +
                 ciman.isInRange(systemResponseTimeSMV.getMean(),ciman.batchSystemResponseTimeSMV));
         System.out.println("\tSystem throughput ....................... =   " +

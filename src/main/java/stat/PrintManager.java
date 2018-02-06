@@ -10,7 +10,6 @@ public class PrintManager {
 
     protected BatchManager batch;
 
-    private PrintWriter systemUtilizationWriter;
     private PrintWriter systemThroughputWriter;
     private PrintWriter systemResponseTimeWriter;
     private PrintWriter cloudletResponseTimeWriter;
@@ -54,7 +53,7 @@ public class PrintManager {
     }
 
     public void writeFiles() {
-        //systemUtilizationWriter.println(batch.batchSystemUtilization / AppConfiguration.BATCH_SIZE);
+
         //systemResponseTimeWriter.println(batch.batchSystemResponseTime / AppConfiguration.BATCH_SIZE);
         //systemThroughputWriter.println(batch.batchSystemThroughput/ AppConfiguration.BATCH_SIZE );
 
@@ -106,7 +105,6 @@ public class PrintManager {
         createFile();
 
         // general system stats
-        systemUtilizationWriter = createPrintWriter("output/system/utilization.txt");
         systemThroughputWriter = createPrintWriter("output/system/throughput.txt");
         systemResponseTimeWriter = createPrintWriter("output/system/response_time.txt");
 
@@ -132,7 +130,6 @@ public class PrintManager {
     }
 
     public void closeWriters(){
-        systemUtilizationWriter.close();
         systemResponseTimeWriter.close();
         systemThroughputWriter.close();
 
