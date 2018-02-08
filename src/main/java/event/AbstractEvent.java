@@ -16,6 +16,7 @@ public abstract class AbstractEvent implements Comparable<AbstractEvent>{
 
     @Override
     public int compareTo(AbstractEvent o) {
+        // necessary to ensure the proper functioning of the priority queue data structure
         if (this.eventTime < o.eventTime)
             return -1;
         else if (this.eventTime == o.eventTime)

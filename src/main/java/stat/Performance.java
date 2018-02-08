@@ -146,12 +146,14 @@ public class Performance {
         boolean classOne = (task instanceof TaskClassOne);
 
         if (classOne){
+            // add the currentResponseTime computed for class 1 of cloudlet to Simple Mean Values class
             cloudlet1ResponseTimeSMV.addElement(currentResponseTime);
         }
         else{
+            // add the currentResponseTime computed for class 2 of cloudlet to Simple Mean Values class
             cloudlet2ResponseTimeSMV.addElement(currentResponseTime);
         }
-
+        // add the currentResponseTime computed to Simple Mean Values class
         cloudletResponseTimeSMV.addElement(currentResponseTime);
         handleCompletion(currentResponseTime,task);
 
@@ -177,6 +179,7 @@ public class Performance {
             }
 
         }
+        // add the currentResponseTime computed to Simple Mean Values class
         cloudResponseTimeSMV.addElement(currentResponseTime);
         handleCompletion(currentResponseTime,task);
     }
@@ -200,6 +203,7 @@ public class Performance {
                     controller.getCloudService().getClassOneCompletion() +
                     controller.getCloudService().getClassTwoCompletion();
 
+        // update batches statistics
         batchman.updateBatch(index);
 
     }
@@ -267,6 +271,7 @@ public class Performance {
         System.out.println("\ttotal task 2 preempted .................. =   " + totalClassTwoPreemption);
         System.out.println("\tmean response time preempted ............ =   " + f.format(class2PreemptedResponseTimeSMV.getMean())+ " s");
 
+        // test for compute the value of threshold S for minimize cloudlet response time
         if (AppConfiguration.TEST_S){
             if (systemResponseTimeSMV.getMean() < minResponseTime){
                 minResponseTime = systemResponseTimeSMV.getMean();

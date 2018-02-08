@@ -25,6 +25,7 @@ public class SimpleMeanValue {
      * @return the variance at current state
      */
     public double getVariance() {
+        // return current variance
         return current_var / current_index;
     }
     /**
@@ -33,6 +34,7 @@ public class SimpleMeanValue {
      * @return
      */
     public SimpleMeanValue addElement(double elem) {
+        // update current mean and quadratic sums
         current_index++;
         double prev_mean = current_mean;
         current_mean += (1/current_index)*(elem- current_mean);

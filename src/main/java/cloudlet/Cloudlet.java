@@ -60,36 +60,43 @@ public class Cloudlet {
 
     public void assignServer(AbstractTask task){
         if (task instanceof TaskClassOne){
+            // set the service time for class one task
             task.setServiceTime(distributions.exponential(AppConfiguration.CLOUDLET_M1,4));
         }
         else{
+            // set the service time for class two task
             task.setServiceTime(distributions.exponential(AppConfiguration.CLOUDLET_M2,5));
         }
+        // update state variables
         this.incrementPopulation(task);
         taskList.add(task);
+        // create completion event
         AbstractEvent toPush = new CompletionEvent(task);
+        // add completion event to event queue
         eventQueue.addEvent(toPush);
     }
 
     public AbstractTask stopTask(double swappedTime) {
         TaskClassTwo toStop = null;
+        // find task with max completion time in the future
         toStop = (TaskClassTwo) findTaskWithMaxCompletionTime();
 
         if (toStop!=null) {
+            // remove task from cloudlet
             taskList.remove(toStop);
-
+            // remove old completion event
             eventQueue.dropElement(new CompletionEvent(toStop));
 
+            // set preemption flag to task
             toStop.setSwapped(true);
-            this.n2--;
-
-            this.totalClassTwoPreemption++;
-            updatePercentage2Preemption();
-
             toStop.setSwapTime(swappedTime);
 
+            // update state variable
+            this.n2--;
+            this.totalClassTwoPreemption++;
+            updatePercentage2Preemption();
         }
-
+        // return the preempted task
         return toStop;
     }
 
@@ -97,10 +104,12 @@ public class Cloudlet {
         double maxTime = 0.0;
         AbstractTask toStop = null;
 
+        // scroll through the list
         for (AbstractTask task : taskList) {
             if (task instanceof TaskClassTwo){
                 if (maxTime<= task.getCompletionTime()) {
                     maxTime = task.getCompletionTime();
+                    // find the task with max completion time
                     toStop = task;
                 }
             }
@@ -109,7 +118,9 @@ public class Cloudlet {
     }
 
     public void handleCompletion(AbstractTask task) {
+        // remove task from list
         taskList.remove(task);
+        // update state variables
         if (task instanceof TaskClassOne){
             this.n1--;
             this.classOneCompletion++;
@@ -132,6 +143,7 @@ public class Cloudlet {
 
 
     private void updatePercentage2Preemption() {
+        // update percentage of preempted jobs
         this.percentage2Preemption = (double) this.totalClassTwoPreemption / (double) this.totalClassTwoAssigned;
     }
 

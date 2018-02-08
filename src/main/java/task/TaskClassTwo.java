@@ -26,6 +26,8 @@ public class TaskClassTwo extends AbstractTask {
      * Compute Completion Time
      */
     public double getCompletionTime() {
+        // check if the task was preempted
+        // in that case the completion time need to be computed starting from swap time
         return this.isSwapped()
                 ? this.getSwapTime() + this.getServiceTime() + this.getSetupTime()
                 : this.getArrivalTime() + this.getServiceTime();

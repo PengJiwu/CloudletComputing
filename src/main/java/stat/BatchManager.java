@@ -58,6 +58,7 @@ public class BatchManager {
         this.per = p;
         this.batch_size = AppConfiguration.BATCH_SIZE;
 
+        // manager for exporting results on file
         this.printman = new PrintManager(this);
 
         resetIndexes();
@@ -103,6 +104,8 @@ public class BatchManager {
     public void updateBatch(int index) {
 
         double current_time = per.clock.getCurrent();
+
+        // increment all areas by the corresponding value
 
         batchCloudletUtilization += per.cloudletArea.service / current_time;
 
@@ -152,6 +155,7 @@ public class BatchManager {
         batch2TotalPreemptedTask += per.controller.getCloudletService().getTotalClassTwoPreemption();
         batch2TotalClassTwoAssigned += per.controller.getCloudletService().getTotalClassTwoAssigned();
 
+        // call method for update confidence intervals and reset indexes
         updateIntervalsAndReset(index);
     }
 

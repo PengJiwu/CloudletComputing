@@ -15,6 +15,8 @@ public class ConfidenceIntervalManager {
 
     protected double alpha = 0.05;
 
+    // variable for computing the confidence interval estimation
+    // using Welford's Simple Mean Algorithm
 
     protected SimpleMeanValue batchSystemResponseTimeSMV;
     protected SimpleMeanValue batchSystemThroughputSMV;
@@ -154,7 +156,7 @@ public class ConfidenceIntervalManager {
         System.out.println("\n\tfor n="+totalJobs+" with (b,k) = ("+bsize+","+k+")");
 
 
-
+        // for each index print the sample mean and lower, upper endpoint
         System.out.println("\tSystem mean population......................."+_space
                 +f.format(batchSystemPopulationSMV.getMean())+_space
                 +f.format(getLowerEndPoint(batchSystemPopulationSMV))+_space
