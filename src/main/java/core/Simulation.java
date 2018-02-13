@@ -114,7 +114,7 @@ public class Simulation {
         // print result on screen
         performance.printResults();
 
-        /*
+
         double p = controller.getCloudletService().getClassOneCompletion()
                 / (double) (controller.getCloudletService().getClassOneCompletion() + controller.getCloudService().getClassOneCompletion());
 
@@ -123,14 +123,15 @@ public class Simulation {
                 + controller.getCloudletService().getClassTwoCompletion());
 
         double r = (controller.getCloudletService().getTotalClassTwoPreemption()) / (double)
-                (controller.getCloudletService().getClassOneCompletion() +
-                controller.getCloudletService().getClassTwoCompletion() +
-                controller.getCloudletService().getTotalClassTwoPreemption());
+                (controller.getCloudService().getClassTwoCompletion() +
+                controller.getCloudletService().getClassTwoCompletion()+
+                controller.getCloudletService().getClassOneCompletion()+
+               controller.getCloudService().getClassOneCompletion());
 
         System.out.println("p = "+p);
         System.out.println("q = "+q);
         System.out.println("r = "+r);
-        */
+
 
     }
 }
