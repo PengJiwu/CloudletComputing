@@ -114,7 +114,7 @@ public class Simulation {
         // print result on screen
         performance.printResults();
 
-
+/*
         double p = controller.getCloudletService().getClassOneCompletion()
                 / (double) (controller.getCloudletService().getClassOneCompletion() + controller.getCloudService().getClassOneCompletion());
 
@@ -130,7 +130,7 @@ public class Simulation {
 
         System.out.println("p = "+p);
         System.out.println("q = "+q);
-        System.out.println("r = "+r);
+        System.out.println("r = "+r);*/
 
 
     }
